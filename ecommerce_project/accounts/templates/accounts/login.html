@@ -1,0 +1,149 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Đăng nhập{% endblock title %}
+
+{% block content %}
+<div class="container py-5">
+  <!-- Breadcrumb -->
+  <nav aria-label="breadcrumb" class="small mb-4">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'shop:home' %}" class="text-decoration-none">Trang chủ</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Đăng nhập</li>
+    </ol>
+  </nav>
+
+  <div class="row justify-content-center">
+    <div class="col-lg-5">
+      <div class="card border-0 shadow-lg rounded-4">
+        <div class="card-body p-sm-5">
+          <div class="text-center mb-4">
+            <div class="mb-3">
+              <span class="icon-circle bg-primary text-white">
+                <i class="fas fa-user"></i>
+              </span>
+            </div>
+            <h2 class="fw-bold text-primary">Đăng nhập</h2>
+            <p class="text-muted">Đăng nhập để truy cập tài khoản của bạn</p>
+          </div>
+
+          {% if form.errors %}
+          <div class="alert alert-danger">
+            <i class="fas fa-exclamation-circle me-2"></i>Tên đăng nhập hoặc mật khẩu không đúng
+          </div>
+          {% endif %}
+
+          <form method="POST" class="form-floating" novalidate>
+            {% csrf_token %}
+            
+            <div class="form-floating mb-3">
+              <input type="text" name="username" id="username" class="form-control" placeholder="Tên đăng nhập" required>
+              <label for="username">Tên đăng nhập <span class="text-danger">*</span></label>
+            </div>
+            
+            <div class="form-floating mb-3">
+              <input type="password" name="password" id="password" class="form-control" placeholder="Mật khẩu" required>
+              <label for="password">Mật khẩu <span class="text-danger">*</span></label>
+            </div>
+            
+            <div class="d-flex justify-content-between align-items-center mb-4">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="remember-me">
+                <label class="form-check-label small" for="remember-me">
+                  Ghi nhớ đăng nhập
+                </label>
+              </div>
+              <a href="#" class="text-decoration-none small">Quên mật khẩu?</a>
+            </div>
+            
+            <div class="d-grid">
+              <button type="submit" class="btn btn-primary btn-lg">
+                <i class="fas fa-sign-in-alt me-2"></i>Đăng nhập
+              </button>
+            </div>
+          </form>
+          
+          <div class="mt-4 text-center">
+            <p class="mb-0">Chưa có tài khoản? <a href="{% url 'accounts:register' %}" class="text-decoration-none fw-medium">Đăng ký ngay</a></p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="row mt-4">
+        <div class="col-md-6 mb-3 mb-md-0">
+          <div class="card border-0 shadow-sm rounded-4 h-100">
+            <div class="card-body">
+              <div class="d-flex align-items-center">
+                <div class="text-primary me-3">
+                  <i class="fas fa-headset fa-lg"></i>
+                </div>
+                <div>
+                  <h6 class="mb-1">Hỗ trợ 24/7</h6>
+                  <p class="text-muted small mb-0">Luôn sẵn sàng hỗ trợ</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card border-0 shadow-sm rounded-4 h-100">
+            <div class="card-body">
+              <div class="d-flex align-items-center">
+                <div class="text-primary me-3">
+                  <i class="fas fa-shield-alt fa-lg"></i>
+                </div>
+                <div>
+                  <h6 class="mb-1">Bảo mật</h6>
+                  <p class="text-muted small mb-0">An toàn & bảo mật</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.icon-circle {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+}
+
+.form-floating > .form-control {
+  padding: 1rem 0.75rem;
+}
+
+.form-control:focus {
+  border-color: var(--bs-primary);
+  box-shadow: 0 0 0 0.25rem rgba(var(--bs-primary-rgb), 0.25);
+}
+
+.btn {
+  transition: transform 0.2s;
+}
+
+.btn:hover {
+  transform: translateY(-3px);
+}
+
+.card {
+  transition: transform 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.form-check-input:checked {
+  background-color: var(--bs-primary);
+  border-color: var(--bs-primary);
+}
+</style>
+{% endblock content %}

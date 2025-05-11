@@ -1,0 +1,501 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Thông tin tài khoản{% endblock title %}
+
+{% block content %}
+<div class="container py-5">
+  <!-- Breadcrumb -->
+  <nav aria-label="breadcrumb" class="small mb-4">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'shop:home' %}" class="text-decoration-none">Trang chủ</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Thông tin tài khoản</li>
+    </ol>
+  </nav>
+
+  <div class="row">
+    <!-- Left sidebar -->
+    <div class="col-lg-3 mb-4">
+      <div class="card border-0 shadow-sm rounded-4 mb-4">
+        <div class="card-header bg-white pt-4 pb-3 border-0">
+          <div class="d-flex align-items-center">
+            <div class="avatar-circle bg-primary text-white me-3">
+              {% if user.avatar %}
+                <img src="{{ user.avatar.url }}" alt="{{ user.username }}" class="avatar-img">
+              {% else %}
+                <i class="fas fa-user"></i>
+              {% endif %}
+            </div>
+            <div>
+              <h5 class="mb-0">{{ user.get_full_name|default:user.username }}</h5>
+              <p class="text-muted small mb-0">{{ user.email }}</p>
+            </div>
+          </div>
+        </div>
+        <div class="card-body p-0">
+          <div class="list-group list-group-flush">
+            <a href="{% url 'accounts:profile' %}" class="list-group-item list-group-item-action active py-3">
+              <i class="fas fa-user-circle me-2"></i>Thông tin tài khoản
+            </a>
+            <a href="{% url 'orders:order_history' %}" class="list-group-item list-group-item-action py-3">
+              <i class="fas fa-box me-2"></i>Đơn hàng của tôi
+            </a>
+            <a href="#" class="list-group-item list-group-item-action py-3">
+              <i class="fas fa-heart me-2"></i>Sản phẩm yêu thích
+            </a>
+            <a href="#" class="list-group-item list-group-item-action py-3">
+              <i class="fas fa-map-marker-alt me-2"></i>Địa chỉ giao hàng
+            </a>
+            <a href="#" class="list-group-item list-group-item-action py-3">
+              <i class="fas fa-lock me-2"></i>Đổi mật khẩu
+            </a>
+            <a href="{% url 'accounts:logout' %}" class="list-group-item list-group-item-action py-3 text-danger">
+              <i class="fas fa-sign-out-alt me-2"></i>Đăng xuất
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="card border-0 shadow-sm rounded-4">
+        <div class="card-body">
+          <div class="d-flex align-items-center">
+            <div class="text-primary me-3">
+              <i class="fas fa-headset fa-lg"></i>
+            </div>
+            <div>
+              <h6 class="mb-1">Hỗ trợ 24/7</h6>
+              <p class="text-muted small mb-0">Liên hệ: 0365480142</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main content -->
+    <div class="col-lg-9">
+      <!-- Profile information -->
+      <div class="card border-0 shadow-lg rounded-4 mb-4">
+        <div class="card-header bg-white pt-4 pb-0 border-0">
+          <div class="d-flex justify-content-between align-items-center">
+            <h3 class="h5 text-primary fw-bold mb-0">
+              <i class="fas fa-user-edit me-2"></i>Thông tin cá nhân
+            </h3>
+            <button id="edit-profile-btn" class="btn btn-sm btn-outline-primary">
+              <i class="fas fa-pencil-alt me-1"></i>Chỉnh sửa
+            </button>
+          </div>
+        </div>
+        <div class="card-body p-4">
+          <div id="profile-info" class="mb-4">
+            <div class="text-center mb-4">
+              <div class="avatar-preview mx-auto mb-3">
+                {% if user.avatar %}
+                  <img src="{{ user.avatar.url }}" alt="{{ user.username }}" class="avatar-preview-img">
+                {% else %}
+                  <div class="avatar-placeholder">
+                    <i class="fas fa-user fa-3x text-muted"></i>
+                  </div>
+                {% endif %}
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-md-6 mb-3 mb-md-0">
+                <div class="p-3 rounded-3 bg-light">
+                  <p class="small text-muted mb-1">Tài khoản</p>
+                  <p class="fw-medium mb-0">{{ user.username }}</p>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="p-3 rounded-3 bg-light">
+                  <p class="small text-muted mb-1">Email</p>
+                  <p class="fw-medium mb-0">{{ user.email }}</p>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6 mb-3 mb-md-0">
+                <div class="p-3 rounded-3 bg-light">
+                  <p class="small text-muted mb-1">Họ</p>
+                  <p class="fw-medium mb-0">{{ user.last_name|default:"Chưa cập nhật" }}</p>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="p-3 rounded-3 bg-light">
+                  <p class="small text-muted mb-1">Tên</p>
+                  <p class="fw-medium mb-0">{{ user.first_name|default:"Chưa cập nhật" }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="profile-form" class="d-none">
+            <form method="POST" class="form-floating" novalidate enctype="multipart/form-data">
+              {% csrf_token %}
+              
+              <div class="text-center mb-4">
+                <div class="avatar-upload mx-auto">
+                  <div class="avatar-edit">
+                    <input type="file" id="id_avatar" name="avatar" accept="image/*" class="d-none">
+                    <label for="id_avatar" class="btn btn-sm btn-primary rounded-circle">
+                      <i class="fas fa-camera"></i>
+                    </label>
+                  </div>
+                  <div class="avatar-preview">
+                    {% if user.avatar %}
+                      <img src="{{ user.avatar.url }}" alt="{{ user.username }}" id="avatar-preview-img" class="avatar-preview-img">
+                    {% else %}
+                      <div class="avatar-placeholder" id="avatar-placeholder">
+                        <i class="fas fa-user fa-3x text-muted"></i>
+                      </div>
+                      <img src="" alt="{{ user.username }}" id="avatar-preview-img" class="avatar-preview-img d-none">
+                    {% endif %}
+                  </div>
+                </div>
+                <p class="text-muted small mt-2">Nhấp vào icon camera để thay đổi ảnh đại diện</p>
+              </div>
+              
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <div class="form-floating">
+                    <input type="text" name="username" id="id_username" class="form-control {% if form.username.errors %}is-invalid{% endif %}" value="{{ user.username }}" placeholder="Tên đăng nhập" required>
+                    <label for="id_username">Tên đăng nhập <span class="text-danger">*</span></label>
+                    {% if form.username.errors %}
+                      <div class="invalid-feedback">{{ form.username.errors.0 }}</div>
+                    {% endif %}
+                  </div>
+                </div>
+                
+                <div class="col-md-6">
+                  <div class="form-floating">
+                    <input type="email" name="email" id="id_email" class="form-control {% if form.email.errors %}is-invalid{% endif %}" value="{{ user.email }}" placeholder="Email" required>
+                    <label for="id_email">Email <span class="text-danger">*</span></label>
+                    {% if form.email.errors %}
+                      <div class="invalid-feedback">{{ form.email.errors.0 }}</div>
+                    {% endif %}
+                  </div>
+                </div>
+                
+                <div class="col-md-6">
+                  <div class="form-floating">
+                    <input type="text" name="last_name" id="id_last_name" class="form-control {% if form.last_name.errors %}is-invalid{% endif %}" value="{{ user.last_name }}" placeholder="Họ">
+                    <label for="id_last_name">Họ</label>
+                    {% if form.last_name.errors %}
+                      <div class="invalid-feedback">{{ form.last_name.errors.0 }}</div>
+                    {% endif %}
+                  </div>
+                </div>
+                
+                <div class="col-md-6">
+                  <div class="form-floating">
+                    <input type="text" name="first_name" id="id_first_name" class="form-control {% if form.first_name.errors %}is-invalid{% endif %}" value="{{ user.first_name }}" placeholder="Tên">
+                    <label for="id_first_name">Tên</label>
+                    {% if form.first_name.errors %}
+                      <div class="invalid-feedback">{{ form.first_name.errors.0 }}</div>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+              
+              <div class="d-flex justify-content-end gap-2 mt-4">
+                <button type="button" id="cancel-edit-btn" class="btn btn-light">Hủy</button>
+                <button type="submit" class="btn btn-primary">
+                  <i class="fas fa-save me-2"></i>Lưu thay đổi
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Account summary -->
+      <div class="row mb-4">
+        <div class="col-md-4 mb-4 mb-md-0">
+          <div class="card border-0 shadow-sm rounded-4 h-100">
+            <div class="card-body text-center p-4">
+              <div class="mb-3">
+                <div class="summary-icon bg-primary-subtle rounded-circle text-primary mx-auto">
+                  <i class="fas fa-shopping-bag"></i>
+                </div>
+              </div>
+              <h5 class="counter mb-2">{{ user.orders.count|default:"0" }}</h5>
+              <p class="text-muted mb-0">Đơn hàng đã đặt</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 mb-4 mb-md-0">
+          <div class="card border-0 shadow-sm rounded-4 h-100">
+            <div class="card-body text-center p-4">
+              <div class="mb-3">
+                <div class="summary-icon bg-danger-subtle rounded-circle text-danger mx-auto">
+                  <i class="fas fa-heart"></i>
+                </div>
+              </div>
+              <h5 class="counter mb-2">{{ user.wishlist.count|default:"0" }}</h5>
+              <p class="text-muted mb-0">Sản phẩm yêu thích</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card border-0 shadow-sm rounded-4 h-100">
+            <div class="card-body text-center p-4">
+              <div class="mb-3">
+                <div class="summary-icon bg-success-subtle rounded-circle text-success mx-auto">
+                  <i class="fas fa-calendar-alt"></i>
+                </div>
+              </div>
+              <h5 class="counter mb-2">{{ user.date_joined|date:"d/m/Y" }}</h5>
+              <p class="text-muted mb-0">Ngày tham gia</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent orders -->
+      <div class="card border-0 shadow-sm rounded-4">
+        <div class="card-header bg-white pt-4 pb-0 border-0">
+          <div class="d-flex justify-content-between align-items-center">
+            <h3 class="h5 text-primary fw-bold mb-0">
+              <i class="fas fa-box me-2"></i>Đơn hàng gần đây
+            </h3>
+            <a href="{% url 'orders:order_history' %}" class="btn btn-sm btn-outline-primary">
+              Xem tất cả
+            </a>
+          </div>
+        </div>
+        <div class="card-body p-4">
+          {% if user.orders.all %}
+            <div class="table-responsive">
+              <table class="table table-hover align-middle">
+                <thead class="table-light">
+                  <tr>
+                    <th scope="col">Mã đơn hàng</th>
+                    <th scope="col">Ngày đặt</th>
+                    <th scope="col">Tổng tiền</th>
+                    <th scope="col">Trạng thái</th>
+                    <th scope="col">Thao tác</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for order in user.orders.all|slice:":3" %}
+                    <tr>
+                      <td class="fw-medium">#{{ order.id }}</td>
+                      <td>{{ order.created_at|date:"d/m/Y" }}</td>
+                      <td class="text-primary fw-bold">{{ order.total_formatted }}</td>
+                      <td>
+                        {% if order.status == 'pending' %}
+                          <span class="badge bg-warning">Chờ xác nhận</span>
+                        {% elif order.status == 'processing' %}
+                          <span class="badge bg-info">Đang xử lý</span>
+                        {% elif order.status == 'shipped' %}
+                          <span class="badge bg-primary">Đang giao hàng</span>
+                        {% elif order.status == 'delivered' %}
+                          <span class="badge bg-success">Đã giao hàng</span>
+                        {% elif order.status == 'canceled' %}
+                          <span class="badge bg-danger">Đã hủy</span>
+                        {% else %}
+                          <span class="badge bg-secondary">{{ order.get_status_display }}</span>
+                        {% endif %}
+                      </td>
+                      <td>
+                        <a href="#" class="btn btn-sm btn-outline-primary">
+                          <i class="fas fa-eye"></i> Chi tiết
+                        </a>
+                      </td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          {% else %}
+            <div class="text-center py-4">
+              <div class="empty-orders mb-3">
+                <i class="fas fa-shopping-bag text-muted display-3"></i>
+              </div>
+              <h5 class="mb-3">Bạn chưa có đơn hàng nào</h5>
+              <p class="text-muted mb-4">Hãy khám phá sản phẩm và đặt hàng ngay!</p>
+              <a href="{% url 'shop:product_list' %}" class="btn btn-primary">
+                <i class="fas fa-shopping-cart me-2"></i>Mua sắm ngay
+              </a>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.avatar-circle {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  overflow: hidden;
+  position: relative;
+}
+
+.avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatar-preview {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  overflow: hidden;
+  position: relative;
+  border: 3px solid #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: #f8f9fa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar-preview-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatar-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background-color: #f8f9fa;
+}
+
+.avatar-upload {
+  position: relative;
+  width: 120px;
+  height: 120px;
+}
+
+.avatar-edit {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+}
+
+.summary-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
+}
+
+.counter {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.form-floating > .form-control {
+  padding: 1rem 0.75rem;
+}
+
+.form-control:focus {
+  border-color: var(--bs-primary);
+  box-shadow: 0 0 0 0.25rem rgba(var(--bs-primary-rgb), 0.25);
+}
+
+.list-group-item {
+  transition: all 0.2s ease;
+}
+
+.list-group-item:hover:not(.active) {
+  background-color: #f8f9fa;
+  transform: translateX(5px);
+}
+
+.card {
+  transition: transform 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.btn {
+  transition: all 0.2s;
+}
+
+.btn:hover:not([disabled]) {
+  transform: translateY(-2px);
+}
+
+.empty-orders {
+  opacity: 0.5;
+}
+
+.badge {
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+.table > :not(caption) > * > * {
+  padding: 1rem 0.75rem;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const profileInfo = document.getElementById('profile-info');
+  const profileForm = document.getElementById('profile-form');
+  const editProfileBtn = document.getElementById('edit-profile-btn');
+  const cancelEditBtn = document.getElementById('cancel-edit-btn');
+
+  editProfileBtn.addEventListener('click', function() {
+    profileInfo.classList.add('d-none');
+    profileForm.classList.remove('d-none');
+  });
+
+  cancelEditBtn.addEventListener('click', function() {
+    profileForm.classList.add('d-none');
+    profileInfo.classList.remove('d-none');
+  });
+  
+  const avatarInput = document.getElementById('id_avatar');
+  const avatarPreviewImg = document.getElementById('avatar-preview-img');
+  const avatarPlaceholder = document.getElementById('avatar-placeholder');
+  
+  if (avatarInput) {
+    avatarInput.addEventListener('change', function() {
+      if (this.files && this.files[0]) {
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+          avatarPreviewImg.setAttribute('src', e.target.result);
+          avatarPreviewImg.classList.remove('d-none');
+          if (avatarPlaceholder) {
+            avatarPlaceholder.classList.add('d-none');
+          }
+        }
+        
+        reader.readAsDataURL(this.files[0]);
+      }
+    });
+  }
+  
+  if (document.querySelector('.alert-success')) {
+    setTimeout(() => {
+      const alert = document.querySelector('.alert-success');
+      alert.classList.add('fade');
+      setTimeout(() => {
+        alert.remove();
+      }, 500);
+    }, 3000);
+  }
+});
+</script>
+{% endblock content %} 

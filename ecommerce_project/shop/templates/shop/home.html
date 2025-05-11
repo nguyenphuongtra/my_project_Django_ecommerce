@@ -1,0 +1,1124 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load vnd_filters %}
+
+{% block title %}Trang chủ{% endblock title %}
+
+{% block content %}
+<div class="announcement-bar py-2 bg-primary text-white">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="d-none d-md-block">
+        <span><i class="bi bi-truck"></i>Miễn phí vận chuyển cho đơn hàng trên 500.000₫</span>
+      </div>
+      <div class="d-flex gap-3">
+        <a href="#" class="text-white text-decoration-none"><i class="bi bi-geo-alt"></i> Tìm kiếm cửa hàng</a>
+        <a href="#" class="text-white text-decoration-none"><i class="bi bi-telephone"></i> Hotline: 0365480142</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row g-0">
+  <div class="col-md-2 d-none d-md-block sidebar-categories" style="border-right: 1px solid #ddd;">
+    <nav class="nav flex-column py-4">
+      <span class="fw-bold px-3 text-uppercase mb-2">Danh mục</span>
+      {% for category in categories %}
+        <a class="nav-link category-link" href="{% url 'shop:category_products' category.id %}">{{ category.name }}</a>
+      {% endfor %}
+    </nav>
+  </div>
+  <div class="col-md-10">
+    <section class="p-md-4 p-2">
+      <div id="carouselExampleInterval" class="carousel slide rounded shadow-sm" data-bs-ride="carousel">
+        <div class="carousel-inner rounded">
+          <div class="carousel-item active" data-bs-interval="3000">
+            <div class="row g-0" style="height: 500px;">
+              <div class="col-md-6 d-flex flex-column justify-content-center p-4 p-md-5 bg-black" 
+                   style="background-color: rgba(0, 0, 0, 0.7); color: white;">
+                <img src="{{ MEDIA_URL }}images/apple_logo.png" alt="Apple" 
+                     style="width: 40px; margin-bottom: 10px;">
+                <p class="text-muted mb-1" style="font-size: 14px;">iPhone 14 Series</p>
+                <h2 class="fw-bold mb-3" style="font-size: 36px;">Voucher giảm giá lên đến 10%</h2>
+                <a href="/products" class="btn-banner">Mua ngay <i class="bi bi-arrow-right"></i></a>
+              </div>
+              <div class="col-md-6">
+                <img src="{{ MEDIA_URL }}images/banner.png" class="img-fluid w-100 h-100" alt="Slide 1" 
+                     style="object-fit: cover; height: 500px;">
+              </div>
+            </div>
+          </div>
+          <div class="carousel-item" data-bs-interval="3000">
+            <div class="row g-0" style="height: 500px;">
+              <div class="col-md-6 d-flex flex-column justify-content-center p-4 p-md-5 bg-black" 
+                   style="background-color: rgba(0, 0, 0, 0.7); color: white;">
+                <h2 class="fw-bold mb-3" style="font-size: 36px;">Một Ưu Đãi Tuyệt Vời Khác</h2>
+                <p class="mb-4" style="font-size: 18px;">Hãy xem ngay!</p>
+                <a href="/products" class="btn-banner">Mua ngay <i class="bi bi-arrow-right"></i></a>
+              </div>
+              <div class="col-md-6">
+                <img src="{{ MEDIA_URL }}images/banner2.webp" class="img-fluid w-100 h-100" alt="Slide 2" 
+                     style="object-fit: cover; height: 500px;">
+              </div>
+            </div>
+          </div>
+          <div class="carousel-item position-relative" data-bs-interval="3000">
+            <div class="row g-0">
+              <img src="{{ MEDIA_URL }}images/banner3.png" class="d-block w-100" alt="Slide 3" style="height: 500px;">
+              <div class="carousel-caption d-none d-md-block">
+                <h3 class="display-4 fw-bold">Khám phá ngay</h3>
+                <a href="/products" class="btn btn-light btn-lg mt-3">Xem thêm</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+    </section>
+    <section class="p-md-4 p-3">
+      <div class="flash-sale-header mb-4">
+        <div class="d-flex align-items-center justify-content-between">
+          <div class="d-flex align-items-center">
+            <div class="flash-icon me-2 pulse">
+              <i class="bi bi-lightning-fill text-warning"></i>
+            </div>
+            <h4 class="fw-bold mb-0 text-danger">Flash Sales</h4>
+          </div>
+          <div class="countdown-wrapper bg-light rounded-pill px-3 py-2 shadow-sm">
+            <div class="d-flex align-items-center">
+              <span class="text-danger me-2">Kết thúc sau:</span>
+              <div class="countdown-timer d-flex" id="flash-sale-countdown">
+                <div class="time-section">
+                  <div class="time-amount">
+                    <span id="hours" class="time-value">24</span>
+                  </div>
+                  <div class="time-label">Giờ</div>
+                </div>
+                <div class="time-section ms-2">
+                  <div class="time-amount">
+                    <span id="minutes" class="time-value">00</span>
+                  </div>
+                  <div class="time-label">Phút</div>
+                </div>
+                <div class="time-section ms-2">
+                  <div class="time-amount">
+                    <span id="seconds" class="time-value">00</span>
+                  </div>
+                  <div class="time-label">Giây</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="flash-sale-progress mt-2">
+          <div class="progress" style="height: 6px;">
+            <div class="progress-bar progress-bar-striped progress-bar-animated bg-danger" role="progressbar" style="width: 65%;" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
+          </div>
+          <div class="d-flex justify-content-between mt-1">
+            <small class="text-muted">Đã bán: 65%</small>
+            <small class="text-danger">Còn lại: 35%</small>
+          </div>
+        </div>
+      </div>
+      
+      {% if featured_products %}
+        <div class="row">
+          {% for product in featured_products %}
+            <div class="col-md-3 col-sm-6 mb-4">
+              <div class="card h-100 shadow-sm border-0 product-card">
+                <div class="position-relative product-img-wrapper">
+                  {% if product.image %}
+                    <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}" style="height: 200px; width:200px; object-fit: cover;">
+                  {% else %}
+                    <img src="{% static 'images/no-image.png' %}" class="card-img-top" alt="No image" style="height: 200px; object-fit: cover;">
+                  {% endif %}
+                  <div class="flash-badge position-absolute top-0 start-0 m-2">
+                    <span class="badge bg-danger rounded-pill px-2 py-1 pulse-badge">
+                      <i class="bi bi-lightning-fill"></i> SALE
+                    </span>
+                  </div>
+                  <div class="product-actions position-absolute">
+                    <button class="btn btn-sm btn-light rounded-circle" title="Add to wishlist">
+                      <i class="bi bi-heart"></i>
+                    </button>
+                    <button class="btn btn-sm btn-light rounded-circle" title="Quick view">
+                      <i class="bi bi-eye"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="card-body d-flex flex-column">
+                  <h5 class="card-title fs-6 text-truncate">{{ product.name }}</h5>
+                  <div class="d-flex align-items-center mb-1">
+                    <div class="ratings">
+                      <i class="bi bi-star-fill text-warning"></i>
+                      <i class="bi bi-star-fill text-warning"></i>
+                      <i class="bi bi-star-fill text-warning"></i>
+                      <i class="bi bi-star-fill text-warning"></i>
+                      <i class="bi bi-star-half text-warning"></i>
+                    </div>
+                    <small class="text-muted ms-1">({{ forloop.counter|add:10 }})</small>
+                  </div>
+                  <div class="price-wrapper mb-2">
+                    <span class="fs-5 text-danger fw-bold">{{ product.price|vnd }}</span>
+                    <span class="text-muted text-decoration-line-through ms-2 small">{{ product.price|add:"200000"|vnd }}</span>
+                  </div>
+                  <div class="product-sold mb-2">
+                    <div class="progress" style="height: 4px;">
+                      <div class="progress-bar bg-warning" role="progressbar" style="width: {{ forloop.counter|add:40 }}%;" aria-valuenow="{{ forloop.counter|add:40 }}" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    <small class="text-muted">Đã bán: {{ forloop.counter|add:20 }}</small>
+                  </div>
+                  <a href="{% url 'shop:product_detail' product.id %}" class="btn btn-sm btn-primary mt-auto">
+                    <i class="bi bi-cart-plus me-1"></i> Xem chi tiết
+                  </a>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p>Không có sản phẩm nổi bật nào!</p>
+      {% endif %}
+    </section>
+
+    <section class="speaker-promo py-5 my-4" style="background-color: #000;">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-lg-6">
+            <div class="p-4">
+              <div class="mb-2">
+                <span class="text-success small text-uppercase">Danh mục</span>
+              </div>
+              <h2 class="display-5 fw-bold text-white mb-4">Nâng Cao<br>Trải Nghiệm Âm Nhạc</h2>
+              
+              <div class="countdown-circles d-flex mb-4">
+                <div class="countdown-item me-3">
+                  <div class="bg-white rounded-circle d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
+                    <div class="text-center">
+                      <div class="fs-4 fw-bold" id="promo-hours">2</div>
+                      <div class="small text-muted">Ngày</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="countdown-item me-3">
+                  <div class="bg-white rounded-circle d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
+                    <div class="text-center">
+                      <div class="fs-4 fw-bold" id="promo-minutes">23</div>
+                      <div class="small text-muted">Giờ</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="countdown-item me-3">
+                  <div class="bg-white rounded-circle d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
+                    <div class="text-center">
+                      <div class="fs-4 fw-bold" id="promo-seconds">59</div>
+                      <div class="small text-muted">Phút</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="countdown-item">
+                  <div class="bg-white rounded-circle d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
+                    <div class="text-center">
+                      <div class="fs-4 fw-bold" id="promo-milliseconds">59</div>
+                      <div class="small text-muted">Giây</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <a href="{% url 'shop:product_list' %}" class="btn btn-success btn-lg px-5 py-3">Mua ngay!</a>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="text-center">
+              <img src="{{ MEDIA_URL }}images/loa.png" class="img-fluid" alt="JBL Boombox 3" style="max-height: 400px;">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="text-center mb-4">
+      <a href="{% url 'shop:product_list' %}" class="btn btn-primary px-4 shadow-sm view-all-btn">
+        <i class="bi bi-grid me-1"></i> Xem tất cả sản phẩm
+      </a>
+    </div>
+
+    <section class="p-4 trending-products-section">
+      <div class="d-flex align-items-center mb-3">
+        <div class="category-badge rounded-start bg-success p-2">
+          <i class="bi bi-graph-up-arrow text-white"></i>
+        </div>
+        <h2 class="ms-2 fs-3 fw-bold mb-0">Sản phẩm thịnh hành</h2>
+      </div>
+      
+      <div class="row">
+        {% for product in trending_products|slice:":8" %}
+          <div class="col-md-3 col-6 mb-4">
+            <div class="card h-100 shadow-sm border-0 product-card trending-card">
+              <div class="position-relative product-img-wrapper">
+                {% if product.image %}
+                  <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}" style="height: 200px; width:200px; object-fit: cover;">
+                {% else %}
+                  <img src="{% static 'images/no-image.png' %}" class="card-img-top" alt="No image" style="height: 200px; width:200px; object-fit: cover;">
+                {% endif %}
+                <div class="trending-badge position-absolute top-0 start-0 m-2">
+                  <span class="badge bg-success rounded-pill px-2 py-1">
+                    <i class="bi bi-graph-up"></i> TRENDING
+                  </span>
+                </div>
+              </div>
+              <div class="card-body">
+                <h5 class="card-title fs-6 text-truncate">{{ product.name }}</h5>
+                <div class="d-flex justify-content-between align-items-center mt-2">
+                  <span class="fs-5 text-danger fw-bold">{{ product.price|vnd }}</span>
+                  <a href="{% url 'shop:product_detail' product.id %}" class="btn btn-sm btn-outline-success">
+                    <i class="bi bi-eye"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </section>
+    
+    <section class="p-4">
+      <div class="mb-1">
+        <div class="d-flex align-items-center mb-3">
+          <div class="category-badge rounded-start bg-primary p-2">
+            <i class="bi bi-grid-fill text-white"></i>
+          </div>
+          <h2 class="ms-2 fs-3 fw-bold mb-0">Danh mục</h2>
+        </div>
+        <div class="d-flex justify-content-end">
+          <div class="category-nav">
+            <button class="btn btn-light rounded-circle shadow-sm category-nav-btn me-1" id="prevCategory">
+              <i class="bi bi-chevron-left"></i>
+            </button>
+            <button class="btn btn-light rounded-circle shadow-sm category-nav-btn" id="nextCategory">
+              <i class="bi bi-chevron-right"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="brands-wrapper d-flex flex-wrap justify-content-center gap-6 py-3">
+        {% for category in categories %}
+          <div class="category-item">
+            <a href="{% url 'shop:category_products' category.id %}" class="text-decoration-none">
+              <div class="category-card border rounded p-4 text-center">
+                {% if category.name == 'Phones' or category.name == 'Điện thoại' %}
+                  <i class="bi bi-phone"></i>
+                {% elif category.name == 'Computers' or category.name == 'Máy tính' %}
+                  <i class="bi bi-pc-display display-4 mb-3 category-icon"></i>
+                {% elif category.name == 'SmartWatch' or category.name == 'Đồng hồ thông minh' %}
+                  <i class="bi bi-smartwatch display-4 mb-3 category-icon"></i>
+                {% elif category.name == 'Camera' or category.name == 'Máy ảnh' %}
+                  <i class="bi bi-camera display-4 mb-3 category-icon"></i>
+                {% elif category.name == 'HeadPhones' or category.name == 'Tai nghe' %}
+                  <i class="bi bi-headphones display-4 mb-3 category-icon"></i>
+                {% elif category.name == 'Gaming' or category.name == 'Trò chơi' %}
+                  <i class="bi bi-controller display-4 mb-3 category-icon"></i>
+                {% else %}
+                  <i class="bi bi-box display-4 mb-3 category-icon"></i>
+                {% endif %}
+                <h5 class="mb-0">{{ category.name }}</h5>
+              </div>
+            </a>
+          </div>
+        {% endfor %}
+      </div>
+    </section>
+  </div>
+</div>
+
+<div class="container-fluid px-4 mb-5">
+  <div class="row gx-4">
+    <div class="col-md-6 mb-4">
+      <div class="promo-banner rounded shadow-sm position-relative overflow-hidden">
+        <img src="https://www.homecredit.vn/static/cdf3446968e365f4f8fbc9266010e77a/ab7c8/mua_tra_gop_iphone_16_banner_74273b74f0.webp" class="img-fluid w-100" alt="Promotion 1" style="height: 200px; object-fit: cover;">
+        <div class="promo-content position-absolute start-0 top-0 p-4 text-white">
+          <h3 class="fw-bold mb-2">Giá siêu ưu đãi</h3>
+          <p class="mb-3">Giảm giá lên đến 50% cho các mặt hàng đã chọn</p>
+          <a href="{% url 'shop:product_list' %}" class="btn btn-light btn-sm">Mua ngay</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 mb-4">
+      <div class="promo-banner rounded shadow-sm position-relative overflow-hidden">
+        <img src="https://genk.mediacdn.vn/139269124445442048/2023/4/1/photo-1680319565999-16803195672551459863501-1680346456184-1680346456792861218842-1680351682412-16803516827581563294740.jpeg" class="img-fluid w-100" alt="Promotion 2" style="height: 200px; object-fit: cover;">
+        <div class="promo-content position-absolute start-0 top-0 p-4 text-white">
+          <h3 class="fw-bold mb-2">Sản phẩm mới</h3>
+          <p class="mb-3">Hãy xem những sản phẩm mới nhất của chúng tôi</p>
+          <a href="{% url 'shop:product_list' %}" class="btn btn-light btn-sm">Khám phá</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="brands-section py-5 bg-white">
+  <div class="container">
+    <div class="text-center mb-4">
+      <h2 class="fw-bold">Thương hiệu nổi bật</h2>
+      <p class="text-muted">Mua sắm các thương hiệu yêu thích của bạn</p>
+    </div>
+    
+    <div class="row justify-content-center align-items-center">
+      <div class="col-4 col-md-2 mb-4 text-center">
+        <div class="brand-logo p-3 mx-auto">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="Apple" class="img-fluid" style="max-height: 50px;">
+        </div>
+      </div>
+      <div class="col-4 col-md-2 mb-4 text-center">
+        <div class="brand-logo p-3 mx-auto">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/2/24/Samsung_Logo.svg" alt="Samsung" class="img-fluid" style="max-height: 50px;">
+        </div>
+      </div>
+      <div class="col-4 col-md-2 mb-4 text-center">
+        <div class="brand-logo p-3 mx-auto">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Dell_Logo.png" alt="Dell" class="img-fluid" style="max-height: 50px;">
+        </div>
+      </div>
+      <div class="col-4 col-md-2 mb-4 text-center">
+        <div class="brand-logo p-3 mx-auto">
+          <img src="https://thoitranghaianh.com/wp-content/uploads/2018/06/logo-sony.png" alt="Sony" class="img-fluid" style="max-height: 50px;">
+        </div>
+      </div>
+      <div class="col-4 col-md-2 mb-4 text-center">
+        <div class="brand-logo p-3 mx-auto">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Xiaomi_logo_%282021-%29.svg/1200px-Xiaomi_logo_%282021-%29.svg.png" alt="Xiaomi" class="img-fluid" style="max-height: 50px;">
+        </div>
+      </div>
+      <div class="col-4 col-md-2 mb-4 text-center">
+        <div class="brand-logo p-3 mx-auto">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/HP_logo_2012.svg/1200px-HP_logo_2012.svg.png" alt="HP" class="img-fluid" style="max-height: 50px;">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="testimonials-section py-5 bg-light">
+  <div class="container">
+    <div class="text-center mb-4">
+      <h2 class="fw-bold">Khách hàng của chúng tôi nói gì</h2>
+      <p class="text-muted">Được hàng ngàn khách hàng trên toàn thế giới tin tưởng</p>
+    </div>
+    
+    <div class="row">
+      <div class="col-md-4 mb-4">
+        <div class="card h-100 border-0 shadow-sm testimonial-card">
+          <div class="card-body p-4">
+            <div class="d-flex align-items-center mb-3">
+              <div class="testimonial-avatar me-3">
+                <img src="https://yt3.googleusercontent.com/c-Z7mIlntSpG6VyQ5ZqaPggqkZRhaySr-H5ZEazFN2iR1pP4eD1UGekwu0y--c4CSVhJJ1A4QT8=s160-c-k-c0x00ffffff-no-rj" alt="Customer" class="rounded-circle" width="60" height="60">
+              </div>
+              <div>
+                <h5 class="mb-0 fw-bold">Sơn Tùng</h5>
+                <div class="text-warning">
+                  <i class="bi bi-star-fill"></i>
+                  <i class="bi bi-star-fill"></i>
+                  <i class="bi bi-star-fill"></i>
+                  <i class="bi bi-star-fill"></i>
+                  <i class="bi bi-star-fill"></i>
+                </div>
+              </div>
+            </div>
+            <p class="card-text">"Sản phẩm chất lượng tuyệt vời và giao hàng nhanh như chớp. Đây đã trở thành cửa hàng tôi tin tưởng cho mọi nhu cầu công nghệ của mình!"</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-4 mb-4">
+        <div class="card h-100 border-0 shadow-sm testimonial-card">
+          <div class="card-body p-4">
+            <div class="d-flex align-items-center mb-3">
+              <div class="testimonial-avatar me-3">
+                <img src="https://images2.thanhnien.vn/528068263637045248/2024/4/3/jack-1712114239424422902059.jpg" alt="Customer" class="rounded-circle" width="60" height="60">
+              </div>
+              <div>
+                <h5 class="mb-0 fw-bold">Jack</h5>
+                <div class="text-warning">
+                  <i class="bi bi-star-fill"></i>
+                  <i class="bi bi-star-fill"></i>
+                  <i class="bi bi-star-fill"></i>
+                  <i class="bi bi-star-fill"></i>
+                  <i class="bi bi-star-half"></i>
+                </div>
+              </div>
+            </div>
+            <p class="card-text">"Dịch vụ khách hàng thật tuyệt vời! Họ đã giúp tôi chọn được chiếc máy tính xách tay phù hợp nhất với nhu cầu của mình và đưa ra lời khuyên tuyệt vời."</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-4 mb-4">
+        <div class="card h-100 border-0 shadow-sm testimonial-card">
+          <div class="card-body p-4">
+            <div class="d-flex align-items-center mb-3">
+              <div class="testimonial-avatar me-3">
+                <img src="https://cafefcdn.com/203337114487263232/2025/3/24/46809348640087005326936212002837522307145189n-1742805438894970555559-1742809694198-17428096942762046265337.jpg" alt="Customer" class="rounded-circle" width="60" height="60">
+              </div>
+              <div>
+                <h5 class="mb-0 fw-bold">Viruss</h5>
+                <div class="text-warning">
+                  <i class="bi bi-star-fill"></i>
+                  <i class="bi bi-star-fill"></i>
+                  <i class="bi bi-star-fill"></i>
+                  <i class="bi bi-star-fill"></i>
+                  <i class="bi bi-star-fill"></i>
+                </div>
+              </div>
+            </div>
+            <p class="card-text">"Chương trình giảm giá chớp nhoáng thật tuyệt vời! Tôi đã mua được chiếc điện thoại thông minh yêu thích của mình với mức giá không thể tin được. Rất đáng để mua!"</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="benefits">
+  <div class="benefits-container">
+    <div class="benefit-item">
+      <div class="benefit-icon">
+        <i class="fas fa-shield-alt"></i>
+      </div>
+      <h3>Thương hiệu đảm bảo</h3>
+      <p>Nhập khẩu, bảo hành chính hãng</p>
+    </div>
+
+    <div class="benefit-item">
+      <div class="benefit-icon">
+        <i class="fas fa-truck"></i>
+      </div>
+      <h3>Đổi trả dễ dàng</h3>
+      <p>Theo chính sách đổi trả tại NexTech</p>
+    </div>
+
+    <div class="benefit-item">
+      <div class="benefit-icon">
+        <i class="fas fa-sync-alt"></i>
+      </div>
+      <h3>Sản phẩm chất lượng</h3>
+      <p>Đảm bảo tương thích với độ bền cao</p>
+    </div>
+
+    <div class="benefit-item">
+      <div class="benefit-icon">
+        <i class="fas fa-star"></i>
+      </div>
+      <h3>Giao hàng tận nơi</h3>
+      <p>Tại 63 tỉnh thành</p>
+    </div>
+  </div>
+</section>
+<section class="newsletter-section py-5">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div class="card border-0 shadow-lg newsletter-card">
+          <div class="card-body p-5 text-center">
+            <h3 class="fw-bold mb-3">Đăng ký để nhận được thông báo từ chúng tôi</h3>
+            <p class="text-muted mb-4">Hãy cập nhật những thông tin mới nhất về các ưu đãi, sản phẩm mới ra mắt và các chương trình khuyến mại độc quyền của chúng tôi!</p>
+            <div class="row justify-content-center">
+              <div class="col-md-8">
+                <form class="d-flex">
+                  <input type="email" class="form-control me-2" placeholder="Địa chỉ email của bạn">
+                  <button type="submit" class="btn btn-primary px-4">Subscribe</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .flash-sale-header {
+    border-bottom: 1px solid #f1f1f1;
+    padding-bottom: 15px;
+  }
+  
+  .flash-icon {
+    background-color: #fff3cd;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+  
+  .time-value {
+    font-weight: bold;
+    color: #dc3545;
+    font-size: 14px;
+  }
+  
+  .time-label {
+    font-size: 12px;
+    color: #6c757d;
+  }
+  
+  .product-card {
+    transition: all 0.3s ease;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  .product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+  }
+  
+  .category-item {
+    flex: 0 0 auto;
+    width: 180px;
+    margin-right: 15px;
+    transition: transform 0.3s ease;
+  }
+  
+  .category-card {
+    background-color: #fff;
+    transition: all 0.3s ease;
+    height: 100%;
+  }
+  
+  .category-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  }
+  
+  .category-nav-btn {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .category-badge {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* New styles */
+  .category-link {
+    transition: all 0.2s ease;
+    border-left: 3px solid transparent;
+  }
+  
+  .category-link:hover {
+    background-color: #f8f9fa;
+    border-left: 3px solid #0d6efd;
+    color: #0d6efd;
+  }
+  
+  .btn-banner {
+    display: inline-block;
+    color: white;
+    text-decoration: none;
+    width: 200px;
+    font-size: 18px;
+    padding: 8px 16px;
+    border: 2px solid white;
+    border-radius: 30px;
+    transition: all 0.3s ease;
+  }
+  
+  .btn-banner:hover {
+    background-color: white;
+    color: black;
+    transform: translateY(-2px);
+  }
+  
+  .pulse {
+    animation: pulse-animation 2s infinite;
+  }
+  
+  @keyframes pulse-animation {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.1);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  
+  .pulse-badge {
+    animation: pulse-badge 1.5s infinite;
+  }
+  
+  @keyframes pulse-badge {
+    0% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.7;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  
+  .view-all-btn {
+    transition: all 0.3s ease;
+  }
+  
+  .view-all-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(13, 110, 253, 0.3) !important;
+  }
+  
+  .category-icon {
+    color: #0d6efd;
+    transition: all 0.3s ease;
+  }
+  
+  .category-card:hover .category-icon {
+    transform: scale(1.1);
+  }
+  
+  .product-actions {
+    top: 10px;
+    right: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    opacity: 0;
+    transition: all 0.3s ease;
+  }
+  
+  .product-card:hover .product-actions {
+    opacity: 1;
+  }
+  
+  .product-img-wrapper {
+    overflow: hidden;
+  }
+  
+  .product-img-wrapper img {
+    transition: transform 0.5s ease;
+  }
+  
+  .product-card:hover .product-img-wrapper img {
+    transform: scale(1.05);
+  }
+  
+  .ratings {
+    font-size: 14px;
+  }
+  
+  .brand-item {
+    padding: 10px;
+    background: white;
+    border-radius: 8px;
+    width: 200px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+  }
+  
+  .brand-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+  }
+  
+  /* New styles for enhanced UI */
+  .trending-card {
+    border-radius: 12px;
+  }
+  
+  .trending-card .card-body {
+    padding: 1rem;
+  }
+  
+  .promo-banner {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
+  
+  .promo-banner:hover {
+    transform: translateY(-5px);
+  }
+  
+  .promo-content {
+    background: linear-gradient(to right, rgba(0,0,0,0.7), rgba(0,0,0,0.3));
+    height: 100%;
+    width: 100%;
+  }
+  
+  .testimonial-card {
+    transition: all 0.3s ease;
+    border-radius: 10px;
+  }
+  
+  .testimonial-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .testimonial-avatar img {
+    border: 3px solid #fff;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  }
+  
+  .newsletter-card {
+    border-radius: 15px;
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+  }
+  
+  .trending-products-section {
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+    background-color: #fafafa;
+  }
+  
+  .brand-logo {
+    transition: all 0.3s ease;
+    border-radius: 8px;
+    background-color: #f8f9fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100px;
+    cursor: pointer;
+  }
+  
+  .brand-logo:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    background-color: white;
+  }
+  
+  .announcement-bar {
+    font-size: 0.9rem;
+  }
+  
+  /* Responsive improvements */
+  @media (max-width: 768px) {
+    .carousel-item {
+      height: 350px;
+    }
+    
+    .carousel-caption {
+      bottom: 0;
+    }
+    
+    .testimonial-card {
+      margin-bottom: 20px;
+    }
+    
+    .newsletter-card .card-body {
+      padding: 20px !important;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .carousel-item {
+      height: 250px;
+    }
+    
+    .product-card .card-title {
+      font-size: 14px;
+    }
+    
+    .flash-sale-header .countdown-wrapper {
+      font-size: 12px;
+    }
+    
+    .time-value {
+      font-size: 14px;
+    }
+  }
+  
+  /* JBL Promo Section Styles */
+  .speaker-promo {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .speaker-promo::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 40%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(0,128,0,0.2) 0%, rgba(0,0,0,0) 70%);
+    z-index: 1;
+    animation: pulse-glow 4s infinite alternate;
+  }
+  
+  .speaker-promo .countdown-item {
+    transition: all 0.3s ease;
+  }
+  
+  .speaker-promo .countdown-item:hover {
+    transform: translateY(-5px);
+  }
+  
+  .speaker-promo h2 {
+    text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+  }
+  
+  .speaker-promo img {
+    filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5));
+    transition: all 0.5s ease;
+    animation: float 3s ease-in-out infinite;
+  }
+  
+  .speaker-promo img:hover {
+    transform: scale(1.05);
+  }
+  
+  .speaker-promo .btn-success {
+    box-shadow: 0 5px 20px rgba(0,200,0,0.4);
+    transition: all 0.3s ease;
+  }
+  
+  .speaker-promo .btn-success:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0,200,0,0.6);
+  }
+  
+  @keyframes float {
+    0% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+    100% {
+      transform: translateY(0px);
+    }
+  }
+  
+  @keyframes pulse-glow {
+    0% {
+      opacity: 0.5;
+    }
+    100% {
+      opacity: 0.8;
+    }
+  }
+  
+  .benefits {
+    background-color: #fff;
+    padding: 40px 20px;
+  }
+  
+  .benefits-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  
+  .benefit-item {
+    text-align: center;
+    flex: 1;
+    min-width: 200px;
+    margin-bottom: 20px;
+  }
+  
+  .benefit-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 50px;
+    background-color: #ffe6e6;
+    border-radius: 50%;
+    margin: 0 auto 10px;
+  }
+  
+  .benefit-icon i {
+    color: #ff0000;
+    font-size: 24px;
+  }
+  
+  .benefit-item h3 {
+    color: #333;
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  .benefit-item p {
+    color: #666;
+    font-size: 14px;
+    margin: 0;
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .benefits-container {
+      flex-direction: column;
+    }
+  
+    .benefit-item {
+      margin-bottom: 30px;
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const categoryCarousel = document.querySelector('.category-carousel');
+    const prevBtn = document.getElementById('prevCategory');
+    const nextBtn = document.getElementById('nextCategory');
+    const scrollAmount = 200;
+    
+    nextBtn.addEventListener('click', function() {
+      categoryCarousel.scrollBy({
+        left: scrollAmount,
+        behavior: 'smooth'
+      });
+    });
+    
+    prevBtn.addEventListener('click', function() {
+      categoryCarousel.scrollBy({
+        left: -scrollAmount,
+        behavior: 'smooth'
+      });
+    });
+    
+    const countDownDate = new Date();
+    countDownDate.setDate(countDownDate.getDate() + 1); 
+    
+    const countdownTimer = setInterval(function() {
+      const now = new Date().getTime();
+      
+      const distance = countDownDate - now;
+      
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+      
+      document.getElementById("hours").textContent = hours.toString().padStart(2, '0');
+      document.getElementById("minutes").textContent = minutes.toString().padStart(2, '0');
+      document.getElementById("seconds").textContent = seconds.toString().padStart(2, '0');
+      
+      if (distance < 0) {
+        clearInterval(countdownTimer);
+        document.getElementById("flash-sale-countdown").innerHTML = "Đã kết thúc";
+      }
+    }, 1000);
+    
+    const productCards = document.querySelectorAll('.product-card');
+    productCards.forEach(card => {
+      card.addEventListener('touchstart', function() {
+        this.classList.add('hover');
+      }, {passive: true});
+      
+      card.addEventListener('touchend', function() {
+        setTimeout(() => {
+          this.classList.remove('hover');
+        }, 500);
+      }, {passive: true});
+    });
+    
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        
+        const targetId = this.getAttribute('href');
+        if (targetId === '#') return;
+        
+        const target = document.querySelector(targetId);
+        if (target) {
+          window.scrollTo({
+            top: target.offsetTop - 70,
+            behavior: 'smooth'
+          });
+        }
+      });
+    });
+    
+    const animateOnScroll = function() {
+      const elements = document.querySelectorAll('.product-card, .promo-banner, .testimonial-card');
+      
+      elements.forEach(element => {
+        const elementTop = element.getBoundingClientRect().top;
+        const elementVisible = 150;
+        
+        if (elementTop < window.innerHeight - elementVisible) {
+          element.classList.add('visible');
+        }
+      });
+    };
+    
+    animateOnScroll();
+    
+    window.addEventListener('scroll', animateOnScroll);
+    
+    const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+    const mobileSidebar = document.querySelector('.sidebar-categories');
+    
+    if (mobileMenuToggle && mobileSidebar) {
+      mobileMenuToggle.addEventListener('click', function() {
+        mobileSidebar.classList.toggle('show');
+      });
+    }
+    
+    if ('loading' in HTMLImageElement.prototype) {
+      const images = document.querySelectorAll('img[loading="lazy"]');
+      images.forEach(img => {
+        img.src = img.dataset.src;
+      });
+    } else {
+      const script = document.createElement('script');
+      script.src = 'https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.3.2/lazysizes.min.js';
+      document.body.appendChild(script);
+    }
+    
+    const backToTopBtn = document.getElementById('backToTop');
+    if (backToTopBtn) {
+      window.onscroll = function() {
+        if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+          backToTopBtn.style.display = "block";
+        } else {
+          backToTopBtn.style.display = "none";
+        }
+      };
+      
+      backToTopBtn.addEventListener('click', function() {
+        window.scrollTo({top: 0, behavior: 'smooth'});
+      });
+    }
+    
+    
+    
+    updateJBLPromoCountdown();
+    setInterval(updateJBLPromoCountdown, 100);
+  });
+</script>
+
+<button id="backToTop" class="btn btn-primary rounded-circle position-fixed" style="bottom: 20px; right: 20px; display: none; width: 50px; height: 50px;">
+  <i class="bi bi-arrow-up"></i>
+</button>
+{% endblock content %}

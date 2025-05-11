@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Hỗ trợ Trực Tuyến{% endblock title %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <h1 class="display-4 mb-4">Hỗ trợ Trực Tuyến</h1>
+            <p class="lead mb-5">Chào mừng bạn đến với trang hỗ trợ trực tuyến của NEXTECH. Bạn có thể sử dụng chatbot của chúng tôi để được hỗ trợ bất cứ lúc nào bằng cách nhấp vào biểu tượng trò chuyện ở góc dưới bên phải của màn hình.</p>
+            
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body p-4">
+                    <h3 class="h4 mb-3">Chatbot có thể giúp gì cho bạn?</h3>
+                    <ul class="list-group list-group-flush text-start">
+                        <li class="list-group-item border-0 d-flex align-items-center">
+                            <i class="bi bi-check-circle-fill text-success me-3 fs-5"></i>
+                            <span>Tìm kiếm sản phẩm và thông tin giá cả</span>
+                        </li>
+                        <li class="list-group-item border-0 d-flex align-items-center">
+                            <i class="bi bi-check-circle-fill text-success me-3 fs-5"></i>
+                            <span>Trả lời các câu hỏi thường gặp</span>
+                        </li>
+                        <li class="list-group-item border-0 d-flex align-items-center">
+                            <i class="bi bi-check-circle-fill text-success me-3 fs-5"></i>
+                            <span>Hỗ trợ đặt hàng và thanh toán</span>
+                        </li>
+                        <li class="list-group-item border-0 d-flex align-items-center">
+                            <i class="bi bi-check-circle-fill text-success me-3 fs-5"></i>
+                            <span>Kiểm tra trạng thái đơn hàng</span>
+                        </li>
+                        <li class="list-group-item border-0 d-flex align-items-center">
+                            <i class="bi bi-check-circle-fill text-success me-3 fs-5"></i>
+                            <span>Giải quyết các vấn đề về sản phẩm và dịch vụ</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <button id="open-chat-button" class="btn btn-primary btn-lg">
+                <i class="bi bi-chat-dots-fill me-2"></i>Mở chatbot ngay
+            </button>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block extra_js %}
+<script>
+    document.getElementById('open-chat-button').addEventListener('click', function() {
+        const chatToggle = document.getElementById('chat-toggle');
+        if (chatToggle) {
+            chatToggle.click();
+        }
+    });
+</script>
+{% endblock extra_js %}
+
+

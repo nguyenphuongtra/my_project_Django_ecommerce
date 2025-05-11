@@ -1,0 +1,65 @@
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+<div class="bg-dark text-light py-2 text-center">
+    Khuyến mãi mùa hè cho tất cả các sản phẩm điện thoại và giao hàng nhanh miễn phí - GIẢM 50%
+  <a href="/products" class="text-warning text-decoration-underline">Mua ngay</a>
+</div>
+<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
+  <div class="container">
+    <a class="navbar-brand fw-bold" href="/">NEXTECH</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar"
+            aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="mainNavbar">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'shop:home' %}">Trang chủ</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/products">Sản phẩm</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/contact">Liên hệ</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/about">Giới thiệu</a>
+        </li>
+      </ul>
+      <form class="d-flex me-3" method="GET" action="{% url 'shop:search' %}">
+        <input class="form-control form-control-sm me-2" type="search" placeholder="Tìm sản phẩm..." aria-label="Search" name="q">
+        <button class="btn btn-outline-secondary btn-sm" type="submit">
+          <i class="bi bi-search"></i>
+        </button>
+      </form>
+      <ul class="navbar-nav mb-2 mb-lg-0">
+        {% if user.is_authenticated %}
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'accounts:profile' %}">Hi, {{ user.username }}  |</a>
+        </li>
+          <li class="nav-item">
+            <form action="{% url 'accounts:logout' %}" method="post" class="d-inline">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-link nav-link p-0 m-2">Đăng xuất</button>
+            </form>
+          </li>
+        {% else %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'accounts:login' %}">Đăng nhập |</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'accounts:register' %}">Đăng ký</a>
+          </li>
+        
+        {% endif %}
+        <li class="nav-item">
+          <a class="nav-link position-relative" href="/cart">
+            <i class="bi bi-cart3 fs-5"></i>
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem;">
+              1
+            </span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

@@ -1,0 +1,542 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load vnd_filters %}
+{% block title %}Thanh toán{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <nav aria-label="breadcrumb" class="small mb-4">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'shop:home' %}" class="text-decoration-none">Trang chủ</a></li>
+      <li class="breadcrumb-item"><a href="{% url 'cart:cart_detail' %}" class="text-decoration-none">Giỏ hàng</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Thanh toán</li>
+    </ol>
+  </nav>
+
+  <div class="row">
+    <div class="col-lg-8">
+      <div class="card border-0 shadow-sm rounded-4 mb-4">
+        <div class="card-body p-4">
+          <div class="checkout-progress">
+            <div class="progress-track">
+              <div class="progress-bar bg-primary" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+            <div class="d-flex justify-content-between">
+              <div class="progress-step completed">
+                <div class="step-icon">
+                  <i class="fas fa-shopping-cart"></i>
+                </div>
+                <div class="step-label">Giỏ hàng</div>
+              </div>
+              <div class="progress-step active">
+                <div class="step-icon">
+                  <i class="fas fa-map-marker-alt"></i>
+                </div>
+                <div class="step-label">Thông tin giao hàng</div>
+              </div>
+              <div class="progress-step">
+                <div class="step-icon">
+                  <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="step-label">Hoàn tất</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card shadow-lg rounded-4 border-0 mb-4">
+        <div class="card-header bg-white border-0 pt-4 pb-0">
+          <h2 class="text-primary fw-bold">
+            <i class="fas fa-map-marker-alt me-2"></i>Địa chỉ giao hàng
+          </h2>
+          <p class="text-muted small">Vui lòng nhập thông tin giao hàng chính xác</p>
+        </div>
+        <div class="card-body p-4">
+          <form method="POST" id="checkout-form" novalidate>
+            {% csrf_token %}
+            
+            <div class="row g-3">
+              <div class="col-md-4">
+                <div class="form-floating mb-3">
+                  <select id="province" name="province" class="form-select" required>
+                    <option value="">-- Chọn Tỉnh/TP --</option>
+                  </select>
+                  <label for="province">Tỉnh/Thành phố <span class="text-danger">*</span></label>
+                  <div class="invalid-feedback">Vui lòng chọn tỉnh/thành phố</div>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="form-floating mb-3">
+                  <select id="district" name="district" class="form-select" disabled required>
+                    <option value="">-- Chọn Quận/Huyện --</option>
+                  </select>
+                  <label for="district">Quận/Huyện <span class="text-danger">*</span></label>
+                  <div class="invalid-feedback">Vui lòng chọn quận/huyện</div>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="form-floating mb-3">
+                  <select id="ward" name="ward" class="form-select" disabled required>
+                    <option value="">-- Chọn Xã/Phường --</option>
+                  </select>
+                  <label for="ward">Xã/Phường <span class="text-danger">*</span></label>
+                  <div class="invalid-feedback">Vui lòng chọn xã/phường</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-floating mb-3">
+              <input type="tel" name="phone_number" id="phone_number" class="form-control" pattern="[0-9]{10}" required>
+              <label for="phone_number">Số điện thoại <span class="text-danger">*</span></label>
+              <div class="form-text">Số điện thoại liên hệ khi giao hàng</div>
+              <div class="invalid-feedback">Vui lòng nhập số điện thoại hợp lệ (10 số)</div>
+            </div>
+
+            <div class="form-floating mb-4">
+              <textarea name="shipping_address" id="shipping_address" class="form-control" style="height: 100px" required></textarea>
+              <label for="shipping_address">Địa chỉ cụ thể <span class="text-danger">*</span></label>
+              <div class="form-text">Vui lòng nhập số nhà, tên đường...</div>
+              <div class="invalid-feedback">Vui lòng nhập địa chỉ cụ thể</div>
+            </div>
+
+            <div class="card shadow-sm border-0 mb-4">
+              <div class="card-header bg-white">
+                <h3 class="h5 text-primary mb-0">
+                  <i class="fas fa-credit-card me-2"></i>Phương thức thanh toán
+                </h3>
+              </div>
+              <div class="card-body">
+                <div class="payment-methods">
+                  <div class="form-check payment-method mb-3">
+                    <input class="form-check-input" type="radio" name="payment_method" id="credit_card" value="credit_card" required>
+                    <label class="form-check-label d-flex align-items-center" for="credit_card">
+                      <span class="payment-icon bg-light rounded p-2 me-3">
+                        <i class="far fa-credit-card text-primary fs-4"></i>
+                      </span>
+                      <span>
+                        <strong>Thẻ tín dụng</strong>
+                        <small class="d-block text-muted">Visa, Mastercard, JCB</small>
+                      </span>
+                    </label>
+                  </div>
+                  
+                  <div class="form-check payment-method mb-3">
+                    <input class="form-check-input" type="radio" name="payment_method" id="e_wallet" value="e_wallet">
+                    <label class="form-check-label d-flex align-items-center" for="e_wallet">
+                      <span class="payment-icon bg-light rounded p-2 me-3">
+                        <i class="fas fa-wallet text-primary fs-4"></i>
+                      </span>
+                      <span>
+                        <strong>Ví điện tử</strong>
+                        <small class="d-block text-muted">MoMo, ZaloPay, VNPay</small>
+                      </span>
+                    </label>
+                  </div>
+                  
+                  <div class="form-check payment-method mb-3">
+                    <input class="form-check-input" type="radio" name="payment_method" id="cod" value="cod">
+                    <label class="form-check-label d-flex align-items-center" for="cod">
+                      <span class="payment-icon bg-light rounded p-2 me-3">
+                        <i class="fas fa-truck text-primary fs-4"></i>
+                      </span>
+                      <span>
+                        <strong>Thanh toán khi nhận hàng (COD)</strong>
+                        <small class="d-block text-muted">Thanh toán bằng tiền mặt khi nhận hàng</small>
+                      </span>
+                    </label>
+                  </div>
+                  
+                  <div class="form-check payment-method">
+                    <input class="form-check-input" type="radio" name="payment_method" id="bank_transfer" value="bank_transfer">
+                    <label class="form-check-label d-flex align-items-center" for="bank_transfer">
+                      <span class="payment-icon bg-light rounded p-2 me-3">
+                        <i class="fas fa-university text-primary fs-4"></i>
+                      </span>
+                      <span>
+                        <strong>Chuyển khoản ngân hàng</strong>
+                        <small class="d-block text-muted">Chuyển khoản qua các ngân hàng nội địa</small>
+                      </span>
+                    </label>
+                  </div>
+                </div>
+                <div class="invalid-feedback payment-invalid">Vui lòng chọn phương thức thanh toán</div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-lg-4">
+      <div class="card shadow-lg rounded-4 border-0 mb-4 sticky-top" style="top: 20px; z-index: 10;">
+        <div class="card-header bg-white border-0 pt-4 pb-0">
+          <h3 class="h5 text-primary fw-bold">
+            <i class="fas fa-shopping-cart me-2"></i>Tóm tắt đơn hàng
+          </h3>
+        </div>
+        <div class="card-body p-4">
+          {% if cart_items %}
+            <div class="mb-3" style="max-height: 300px; overflow-y: auto;">
+              {% for item in cart_items %}
+                <div class="d-flex py-2 {% if not forloop.last %}border-bottom{% endif %}">
+                  <div class="flex-shrink-0 position-relative" style="width: 60px; height: 60px;">
+                    {% if item.product.image %}
+                      <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="img-fluid rounded" style="width: 100%; height: 100%; object-fit: cover;">
+                    {% else %}
+                      <img src="{% static 'images/no-image.png' %}" alt="No image" class="img-fluid rounded" style="width: 100%; height: 100%; object-fit: cover;">
+                    {% endif %}
+                    <div class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">
+                      {{ item.quantity }}
+                    </div>
+                  </div>
+                  <div class="ms-3 flex-grow-1">
+                    <div class="d-flex justify-content-between align-items-start">
+                      <div>
+                        <h6 class="mb-0 fs-6 text-truncate" style="max-width: 180px;">{{ item.product.name }}</h6>
+                        <small class="text-muted">{{ item.product.code }}</small>
+                      </div>
+                      <div class="text-end fw-medium">
+                        {{ item.subtotal|vnd }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+            
+            <div class="card bg-light mb-3">
+              <div class="card-body py-2">
+                <div class="d-flex justify-content-between mb-2">
+                  <span>Tạm tính:</span>
+                  <span>{{ total|vnd }}</span>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                  <span>Phí vận chuyển:</span>
+                  <span>30.000 đ</span>
+                </div>
+                <hr class="my-2">
+                <div class="d-flex justify-content-between fw-bold">
+                  <span class="text-danger">Tổng cộng:</span>
+                  <span class="text-danger h5 mb-0">{{ total|add:30000|vnd }}</span>
+                </div>
+              </div>
+            </div>
+          {% else %}
+            <div class="text-center py-4">
+              <div class="mb-3">
+                <i class="fas fa-shopping-cart text-muted display-4"></i>
+              </div>
+              <h5>Giỏ hàng trống</h5>
+              <p class="text-muted">Không có sản phẩm nào trong giỏ hàng</p>
+              <a href="{% url 'shop:product_list' %}" class="btn btn-primary">Tiếp tục mua sắm</a>
+            </div>
+          {% endif %}
+          
+          {% if cart_items %}
+            <button type="submit" form="checkout-form" class="btn btn-primary w-100 btn-lg d-flex align-items-center justify-content-center order-now-btn">
+              <i class="fas fa-check-circle me-2"></i>
+              <span>Đặt hàng ngay</span>
+              <div class="spinner-border spinner-border-sm ms-2 d-none" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+            </button>
+          {% endif %}
+          
+          <div class="text-center mt-3">
+            <small class="text-muted">
+              <i class="fas fa-lock me-1"></i> Thông tin thanh toán của bạn được bảo mật
+            </small>
+          </div>
+        </div>
+      </div>
+      
+      <div class="card shadow-sm border-0">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4 class="h6 mb-0">Hỗ trợ khách hàng</h4>
+            <span class="badge bg-success">Online</span>
+          </div>
+          <div class="d-flex align-items-center mb-2">
+            <div class="support-icon bg-primary rounded-circle text-white me-2">
+              <i class="fas fa-phone-alt"></i>
+            </div>
+            <span>Hotline: 0365480142</span>
+          </div>
+          <div class="d-flex align-items-center">
+            <div class="support-icon bg-primary rounded-circle text-white me-2">
+              <i class="fas fa-envelope"></i>
+            </div>
+            <span>Email: nguyenphuongtra@gmail.com</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', ()=>{
+  const provSel = document.getElementById('province');
+  const distSel = document.getElementById('district');
+  const wardSel = document.getElementById('ward');
+  let provData, distData, wardData;
+
+  const loadingTemplate = '<option value="">Đang tải dữ liệu...</option>';
+  provSel.innerHTML = loadingTemplate;
+
+  Promise.all([
+    fetch("{% static 'data/tinh_tp.json' %}").then(r=>r.json()),
+    fetch("{% static 'data/quan_huyen.json' %}").then(r=>r.json()),
+    fetch("{% static 'data/xa_phuong.json' %}").then(r=>r.json()),
+  ]).then(([p, q, x])=>{
+    provData = p; distData = q; wardData = x;
+
+    provSel.innerHTML = '<option value="">-- Chọn Tỉnh/TP --</option>';
+    for(const code in provData){
+      const opt = new Option(provData[code].name_with_type, code);
+      provSel.add(opt);
+    }
+  }).catch(error => {
+    console.error('Error loading location data:', error);
+    provSel.innerHTML = '<option value="">Lỗi tải dữ liệu</option>';
+  });
+
+  provSel.onchange = ()=>{
+    distSel.innerHTML = '<option value="">-- Chọn Quận/Huyện --</option>';
+    wardSel.innerHTML = '<option value="">-- Chọn Xã/Phường --</option>';
+    wardSel.disabled = true;
+
+    const pc = provSel.value;
+    if(!pc) {
+      distSel.disabled = true;
+      return;
+    }
+    
+    distSel.innerHTML = loadingTemplate;
+    
+    setTimeout(() => {
+      distSel.innerHTML = '<option value="">-- Chọn Quận/Huyện --</option>';
+      Object.values(distData)
+        .filter(d=>d.parent_code===pc)
+        .forEach(d=>{
+          distSel.add(new Option(d.name_with_type, d.code));
+        });
+      distSel.disabled = false;
+    }, 300);
+  };
+
+  distSel.onchange = ()=>{
+    wardSel.innerHTML = '<option value="">-- Chọn Xã/Phường --</option>';
+    const dc = distSel.value;
+    if(!dc){
+      wardSel.disabled = true;
+      return;
+    }
+    
+    wardSel.innerHTML = loadingTemplate;
+    
+    setTimeout(() => {
+      wardSel.innerHTML = '<option value="">-- Chọn Xã/Phường --</option>';
+      Object.values(wardData)
+        .filter(w=>w.parent_code===dc)
+        .forEach(w=>{
+          wardSel.add(new Option(w.name_with_type, w.code));
+        });
+      wardSel.disabled = false;
+    }, 300);
+  };
+  
+  const form = document.getElementById('checkout-form');
+  if (form) {
+    form.addEventListener('submit', (e) => {
+      if (!form.checkValidity()) {
+        e.preventDefault();
+        e.stopPropagation();
+      } else {
+        const orderButton = document.querySelector('.order-now-btn');
+        const spinner = orderButton.querySelector('.spinner-border');
+        orderButton.disabled = true;
+        spinner.classList.remove('d-none');
+        
+        const paymentMethods = document.querySelectorAll('input[name="payment_method"]');
+        const paymentSelected = Array.from(paymentMethods).some(method => method.checked);
+        
+        if (!paymentSelected) {
+          e.preventDefault();
+          e.stopPropagation();
+          document.querySelector('.payment-invalid').style.display = 'block';
+          orderButton.disabled = false;
+          spinner.classList.add('d-none');
+          return;
+        }
+      }
+      form.classList.add('was-validated');
+    });
+    
+    const paymentMethods = document.querySelectorAll('input[name="payment_method"]');
+    paymentMethods.forEach(method => {
+      method.addEventListener('change', () => {
+        document.querySelector('.payment-invalid').style.display = 'none';
+      });
+    });
+  }
+  
+  const formInputs = document.querySelectorAll('.form-control, .form-select');
+  formInputs.forEach(input => {
+    input.addEventListener('focus', () => {
+      input.closest('.form-floating').classList.add('input-focus');
+    });
+    
+    input.addEventListener('blur', () => {
+      input.closest('.form-floating').classList.remove('input-focus');
+    });
+  });
+});
+</script>
+
+<style>
+/* Progress steps */
+.checkout-progress {
+  padding: 10px 0;
+}
+
+.progress-track {
+  height: 4px;
+  background-color: #e9ecef;
+  position: relative;
+  margin: 0 15% 20px;
+  z-index: 0;
+}
+
+.progress-bar {
+  position: absolute;
+  height: 4px;
+  transition: width 0.3s ease;
+}
+
+.progress-step {
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.step-icon {
+  background-color: #e9ecef;
+  color: #6c757d;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 8px;
+  transition: all 0.3s ease;
+}
+
+.progress-step.completed .step-icon,
+.progress-step.active .step-icon {
+  background-color: var(--bs-primary);
+  color: white;
+}
+
+.step-label {
+  font-size: 0.8rem;
+  color: #6c757d;
+}
+
+.progress-step.active .step-label {
+  color: var(--bs-primary);
+  font-weight: 600;
+}
+
+/* Form styling */
+.form-floating {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.input-focus {
+  transform: translateY(-2px);
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--bs-primary);
+  box-shadow: 0 0 0 0.25rem rgba(var(--bs-primary-rgb), 0.25);
+}
+
+/* Payment methods */
+.payment-method label {
+  cursor: pointer;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 10px;
+  transition: all 0.2s;
+}
+
+.payment-method input:checked + label {
+  border-color: var(--bs-primary);
+  background-color: rgba(var(--bs-primary-rgb), 0.05);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.payment-icon {
+  min-width: 50px;
+  text-align: center;
+}
+
+.payment-invalid {
+  display: none;
+  color: #dc3545;
+  margin-top: 8px;
+}
+
+/* Support icons */
+.support-icon {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Form floating adjustments */
+.form-floating > .form-select {
+  padding-top: 1.625rem;
+  padding-bottom: 0.625rem;
+}
+
+/* Validation styling */
+.was-validated .form-select:invalid:not([multiple]):not([size]) {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23dc3545'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e");
+}
+
+/* Product quantity badge */
+.badge {
+  font-size: 0.7rem;
+}
+
+/* Order button hover effect */
+.order-now-btn {
+  transition: all 0.3s ease;
+}
+
+.order-now-btn:hover:not([disabled]) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Animation for card */
+.card {
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+}
+</style>
+{% endblock %}

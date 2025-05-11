@@ -1,0 +1,380 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load vnd_filters %}
+{% block title %}Lịch sử đơn hàng{% endblock title %}
+
+{% block content %}
+<div class="container py-5">
+  <nav aria-label="breadcrumb" class="small mb-4">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'shop:home' %}" class="text-decoration-none">Trang chủ</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Lịch sử đơn hàng</li>
+    </ol>
+  </nav>
+
+  {% if order_success %}
+  <div class="row justify-content-center mb-5">
+    <div class="col-md-8">
+      <div class="card border-0 shadow-lg rounded-4 py-4">
+        <div class="card-body text-center">
+          <div class="mb-4">
+            <div class="order-success-icon">
+              <i class="fas fa-check-circle text-success display-1"></i>
+            </div>
+          </div>
+          <h2 class="mb-3 text-success fw-bold">Đặt hàng thành công!</h2>
+          <p class="lead mb-2">Cảm ơn bạn đã đặt hàng tại cửa hàng của chúng tôi.</p>
+          <p class="text-muted mb-4">Mã đơn hàng của bạn là: <span class="fw-bold">#{{ latest_order.id }}</span></p>
+          <div class="mb-4">
+            <p class="text-muted small mb-1">Chúng tôi đã gửi xác nhận đơn hàng đến email của bạn.</p>
+            <p class="text-muted small">Bạn có thể theo dõi trạng thái đơn hàng ở bên dưới.</p>
+          </div>
+          <div class="d-flex justify-content-center gap-3">
+            <a href="{% url 'shop:home' %}" class="btn btn-outline-primary">
+              <i class="fas fa-home me-2"></i>Quay lại trang chủ
+            </a>
+            <a href="{% url 'shop:product_list' %}" class="btn btn-primary">
+              <i class="fas fa-shopping-bag me-2"></i>Tiếp tục mua sắm
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  <div class="row">
+    <div class="col-md-4 mb-4">
+      <div class="card border-0 shadow-sm rounded-4">
+        <div class="card-header bg-white pt-4 pb-3 border-0">
+          <div class="d-flex align-items-center">
+            <div class="avatar-circle bg-primary text-white me-3">
+              <i class="fas fa-user"></i>
+            </div>
+            <div>
+              <h5 class="mb-0">{{ user.get_full_name|default:user.username }}</h5>
+              <p class="text-muted small mb-0">{{ user.email }}</p>
+            </div>
+          </div>
+        </div>
+        <div class="card-body p-0">
+          <div class="list-group list-group-flush">
+            <a href="{% url 'orders:order_history' %}" class="list-group-item list-group-item-action active py-3">
+              <i class="fas fa-box me-2"></i>Đơn hàng của tôi
+            </a>
+            <a href="#" class="list-group-item list-group-item-action py-3">
+              <i class="fas fa-heart me-2"></i>Sản phẩm yêu thích
+            </a>
+            <a href="#" class="list-group-item list-group-item-action py-3">
+              <i class="fas fa-map-marker-alt me-2"></i>Địa chỉ giao hàng
+            </a>
+            <a href="#" class="list-group-item list-group-item-action py-3">
+              <i class="fas fa-cog me-2"></i>Thiết lập tài khoản
+            </a>
+            <a href="{% url 'accounts:logout' %}" class="list-group-item list-group-item-action py-3 text-danger">
+              <i class="fas fa-sign-out-alt me-2"></i>Đăng xuất
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-8">
+      <div class="card border-0 shadow-sm rounded-4">
+        <div class="card-header bg-white pt-4 pb-3 border-0">
+          <h4 class="mb-0"><i class="fas fa-history me-2"></i>Lịch sử đơn hàng</h4>
+        </div>
+        <div class="card-body">
+          {% if orders %}
+            <div class="table-responsive">
+              <table class="table table-hover align-middle">
+                <thead class="table-light">
+                  <tr>
+                    <th scope="col">Mã đơn hàng</th>
+                    <th scope="col">Ngày đặt</th>
+                    <th scope="col">Tổng tiền</th>
+                    <th scope="col">Trạng thái</th>
+                    <th scope="col">Thao tác</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for order in orders %}
+                    <tr>
+                      <td class="fw-medium">#{{ order.id }}</td>
+                      <td>{{ order.created_at|date:"d/m/Y H:i" }}</td>
+                      <td class="text-primary fw-bold">{{ order.total|vnd }}</td>
+                      <td>
+                        {% if order.status == 'pending' %}
+                          <span class="badge bg-warning">Chờ xác nhận</span>
+                        {% elif order.status == 'processing' %}
+                          <span class="badge bg-info">Đang xử lý</span>
+                        {% elif order.status == 'shipped' %}
+                          <span class="badge bg-primary">Đang giao hàng</span>
+                        {% elif order.status == 'delivered' %}
+                          <span class="badge bg-success">Đã giao hàng</span>
+                        {% elif order.status == 'canceled' %}
+                          <span class="badge bg-danger">Đã hủy</span>
+                        {% else %}
+                          <span class="badge bg-secondary">{{ order.get_status_display }}</span>
+                        {% endif %}
+                      </td>
+                      <td>
+                        <button type="button" class="btn btn-sm btn-outline-primary order-details-btn" data-id="{{ order.id }}">
+                          <i class="fas fa-eye"></i> Xem chi tiết
+                        </button>
+                      </td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          {% else %}
+            <div class="text-center py-5">
+              <div class="empty-orders mb-3">
+                <i class="fas fa-shopping-bag text-muted display-3"></i>
+              </div>
+              <h5 class="mb-3">Bạn chưa có đơn hàng nào</h5>
+              <p class="text-muted mb-4">Hãy khám phá sản phẩm và đặt hàng ngay!</p>
+              <a href="{% url 'shop:product_list' %}" class="btn btn-primary">
+                <i class="fas fa-shopping-cart me-2"></i>Mua sắm ngay
+              </a>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="orderDetailsModal" tabindex="-1" aria-labelledby="orderDetailsModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content border-0 shadow">
+      <div class="modal-header">
+        <h5 class="modal-title" id="orderDetailsModalLabel">Chi tiết đơn hàng #<span id="orderIdDisplay"></span></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-4">
+        <div class="order-loading text-center py-5">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+          <p class="mt-3">Đang tải thông tin đơn hàng...</p>
+        </div>
+        <div class="order-details d-none">
+          <div class="row mb-4">
+            <div class="col-md-6">
+              <h6 class="mb-2">Thông tin đơn hàng</h6>
+              <p class="mb-1"><strong>Mã đơn hàng:</strong> #<span id="orderId"></span></p>
+              <p class="mb-1"><strong>Ngày đặt:</strong> <span id="orderDate"></span></p>
+              <p class="mb-1"><strong>Trạng thái:</strong> <span id="orderStatus"></span></p>
+              <p class="mb-0"><strong>Phương thức thanh toán:</strong> <span id="orderPaymentMethod"></span></p>
+            </div>
+            <div class="col-md-6">
+              <h6 class="mb-2">Thông tin giao hàng</h6>
+              <p class="mb-1"><strong>Địa chỉ:</strong> <span id="shippingAddress"></span></p>
+              <p class="mb-1"><strong>Số điện thoại:</strong> <span id="phoneNumber"></span></p>
+              <p class="mb-0"><strong>Phí vận chuyển:</strong> <span id="shippingFee"></span></p>
+            </div>
+          </div>
+          
+          <h6 class="mb-3">Sản phẩm đã đặt</h6>
+          <div class="table-responsive mb-3">
+            <table class="table table-sm">
+              <thead class="table-light">
+                <tr>
+                  <th>Sản phẩm</th>
+                  <th class="text-center">Số lượng</th>
+                  <th class="text-end">Đơn giá</th>
+                  <th class="text-end">Thành tiền</th>
+                </tr>
+              </thead>
+              <tbody id="orderItemsList">
+              </tbody>
+              <tfoot class="table-light">
+                <tr>
+                  <td colspan="3" class="text-end"><strong>Tạm tính:</strong></td>
+                  <td class="text-end" id="orderSubtotal"></td>
+                </tr>
+                <tr>
+                  <td colspan="3" class="text-end"><strong>Phí vận chuyển:</strong></td>
+                  <td class="text-end" id="orderShippingFeeTotal"></td>
+                </tr>
+                <tr>
+                  <td colspan="3" class="text-end"><strong>Tổng cộng:</strong></td>
+                  <td class="text-end fw-bold text-primary" id="orderTotal"></td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+        <button type="button" class="btn btn-primary" id="downloadInvoice">
+          <i class="fas fa-download me-2"></i>Tải hóa đơn
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.avatar-circle {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+}
+
+.order-success-icon {
+  margin: 0 auto;
+  animation: success-animation 1.5s ease-in-out;
+}
+
+@keyframes success-animation {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  70% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.empty-orders {
+  opacity: 0.5;
+}
+
+.card {
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.list-group-item {
+  transition: all 0.2s ease;
+}
+
+.list-group-item:hover:not(.active) {
+  background-color: #f8f9fa;
+  transform: translateX(5px);
+}
+
+.badge {
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+.table > :not(caption) > * > * {
+  padding: 1rem 0.75rem;
+}
+
+.order-details-btn {
+  transition: all 0.2s ease;
+}
+
+.order-details-btn:hover {
+  transform: translateY(-2px);
+}
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const orderModal = new bootstrap.Modal(document.getElementById('orderDetailsModal'), {
+      keyboard: true
+    });
+    
+    const orderDetailsBtns = document.querySelectorAll('.order-details-btn');
+    orderDetailsBtns.forEach(btn => {
+      btn.addEventListener('click', function() {
+        const orderId = this.getAttribute('data-id');
+        document.getElementById('orderIdDisplay').textContent = orderId;
+        
+        document.querySelector('.order-loading').classList.remove('d-none');
+        document.querySelector('.order-details').classList.add('d-none');
+        
+        orderModal.show();
+        
+        fetch(`/orders/api/order/${orderId}/`)
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+            return response.json();
+          })
+          .then(data => {
+            document.querySelector('.order-loading').classList.add('d-none');
+            document.querySelector('.order-details').classList.remove('d-none');
+            
+            document.getElementById('orderId').textContent = data.id;
+            document.getElementById('orderDate').textContent = data.created_at;
+            
+            let statusBadgeClass = 'bg-secondary';
+            if (data.status === 'pending') statusBadgeClass = 'bg-warning';
+            else if (data.status === 'processing') statusBadgeClass = 'bg-info';
+            else if (data.status === 'shipped') statusBadgeClass = 'bg-primary';
+            else if (data.status === 'delivered') statusBadgeClass = 'bg-success';
+            else if (data.status === 'canceled') statusBadgeClass = 'bg-danger';
+            
+            document.getElementById('orderStatus').innerHTML = 
+              `<span class="badge ${statusBadgeClass}">${data.status_display}</span>`;
+            
+            document.getElementById('orderPaymentMethod').textContent = data.payment_method_display;
+            
+            const fullAddress = [
+              data.shipping_address,
+              data.ward_name,
+              data.district_name,
+              data.province_name
+            ].filter(Boolean).join(', ');
+            
+            document.getElementById('shippingAddress').textContent = fullAddress;
+            document.getElementById('phoneNumber').textContent = data.phone_number || 'Không có thông tin';
+            document.getElementById('shippingFee').textContent = data.shipping_fee_formatted;
+            
+            const orderItemsList = document.getElementById('orderItemsList');
+            orderItemsList.innerHTML = '';
+            
+            data.items.forEach(item => {
+              const row = document.createElement('tr');
+              row.innerHTML = `
+                <td>${item.product_name}</td>
+                <td class="text-center">${item.quantity}</td>
+                <td class="text-end">${item.price_formatted}</td>
+                <td class="text-end">${item.subtotal_formatted}</td>
+              `;
+              orderItemsList.appendChild(row);
+            });
+            
+            document.getElementById('orderSubtotal').textContent = data.subtotal_formatted;
+            document.getElementById('orderShippingFeeTotal').textContent = data.shipping_fee_formatted;
+            document.getElementById('orderTotal').textContent = data.total_formatted;
+          })
+          .catch(error => {
+            console.error('Error fetching order details:', error);
+            document.querySelector('.order-loading').innerHTML = `
+              <div class="text-center py-4">
+                <i class="fas fa-exclamation-circle text-danger display-4 mb-3"></i>
+                <h5>Có lỗi xảy ra</h5>
+                <p class="text-muted">Không thể tải thông tin đơn hàng. Vui lòng thử lại sau.</p>
+              </div>
+            `;
+          });
+      });
+    });
+    
+    document.getElementById('downloadInvoice').addEventListener('click', function() {
+      alert('Tính năng tải hóa đơn đang được phát triển!');
+    });
+  });
+</script>
+{% endblock content %}

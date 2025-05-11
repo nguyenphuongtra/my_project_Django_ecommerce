@@ -1,0 +1,610 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Về chúng tôi{% endblock title %}
+
+{% block extra_css %}
+<style>
+    /* About Page Styles */
+    .about-hero {
+        background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url("{{MEDIA_URL}}images/background.webp");
+        background-size: cover;
+        background-position: center;
+        color: white;
+        padding: 8rem 0;
+        margin-bottom: 4rem;
+    }
+    
+    .about-section {
+        padding: 5rem 0;
+    }
+    
+    .about-section:nth-child(even) {
+        background-color: #f8f9fa;
+    }
+    
+    .section-heading {
+        position: relative;
+        margin-bottom: 2rem;
+        font-weight: 700;
+    }
+    
+    .section-heading:after {
+        content: '';
+        position: absolute;
+        bottom: -12px;
+        left: 0;
+        width: 60px;
+        height: 4px;
+        background-color: #0d6efd;
+        border-radius: 2px;
+    }
+    
+    .text-center .section-heading:after {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    
+    .value-card {
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        transition: all 0.3s ease;
+        height: 100%;
+        background-color: white;
+    }
+    
+    .value-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+    }
+    
+    .value-icon {
+        font-size: 2.5rem;
+        color: #0d6efd;
+        margin-bottom: 1.5rem;
+    }
+    
+    .team-member {
+        position: relative;
+        margin-bottom: 2rem;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    }
+    
+    .team-member img {
+        width: 100%;
+        height: auto;
+        transition: all 0.3s ease;
+    }
+    
+    .team-member:hover img {
+        transform: scale(1.05);
+    }
+    
+    .team-member-info {
+        padding: 1.5rem;
+        background-color: white;
+    }
+    
+    .social-icons {
+        margin-top: 1rem;
+    }
+    
+    .social-icons a {
+        display: inline-block;
+        margin-right: 10px;
+        color: #6c757d;
+        transition: color 0.3s ease;
+    }
+    
+    .social-icons a:hover {
+        color: #0d6efd;
+    }
+    
+    .milestone-item {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+    
+    .milestone-count {
+        font-size: 3rem;
+        font-weight: 700;
+        color: #0d6efd;
+        margin-bottom: 0.5rem;
+    }
+    
+    .testimonial-card {
+        background-color: white;
+        border-radius: 10px;
+        padding: 2rem;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        margin-bottom: 2rem;
+        position: relative;
+    }
+    
+    .testimonial-card:after {
+        content: '\201D';
+        position: absolute;
+        bottom: 10px;
+        right: 20px;
+        font-size: 5rem;
+        color: #f8f9fa;
+        z-index: 0;
+    }
+    
+    .testimonial-content {
+        position: relative;
+        z-index: 1;
+    }
+    
+    .testimonial-author {
+        display: flex;
+        align-items: center;
+        margin-top: 1.5rem;
+    }
+    
+    .testimonial-author img {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        margin-right: 15px;
+        object-fit: cover;
+    }
+    
+    .brand-logos {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+    
+    .brand-logo {
+        filter: grayscale(100%);
+        opacity: 0.6;
+        transition: all 0.3s ease;
+        padding: 1rem;
+        width: 150px;
+    }
+    
+    .brand-logo:hover {
+        filter: grayscale(0);
+        opacity: 1;
+    }
+    
+    .timeline {
+        position: relative;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .timeline::after {
+        content: '';
+        position: absolute;
+        width: 6px;
+        background-color: #e9ecef;
+        top: 0;
+        bottom: 0;
+        left: 50%;
+        margin-left: -3px;
+    }
+
+    .timeline-container {
+        padding: 10px 40px;
+        position: relative;
+        background-color: inherit;
+        width: 50%;
+    }
+
+    .timeline-container::after {
+        content: '';
+        position: absolute;
+        width: 25px;
+        height: 25px;
+        right: -13px;
+        background-color: white;
+        border: 4px solid #0d6efd;
+        top: 15px;
+        border-radius: 50%;
+        z-index: 1;
+    }
+
+    .left {
+        left: 0;
+    }
+
+    .right {
+        left: 50%;
+    }
+
+    .left::before {
+        content: " ";
+        height: 0;
+        position: absolute;
+        top: 22px;
+        width: 0;
+        z-index: 1;
+        right: 30px;
+        border: medium solid white;
+        border-width: 10px 0 10px 10px;
+        border-color: transparent transparent transparent white;
+    }
+
+    .right::before {
+        content: " ";
+        height: 0;
+        position: absolute;
+        top: 22px;
+        width: 0;
+        z-index: 1;
+        left: 30px;
+        border: medium solid white;
+        border-width: 10px 10px 10px 0;
+        border-color: transparent white transparent transparent;
+    }
+
+    .right::after {
+        left: -12px;
+    }
+
+    .timeline-content {
+        padding: 20px 30px;
+        background-color: white;
+        position: relative;
+        border-radius: 6px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+    
+    @media screen and (max-width: 768px) {
+        .timeline::after {
+            left: 31px;
+        }
+        
+        .timeline-container {
+            width: 100%;
+            padding-left: 70px;
+            padding-right: 25px;
+        }
+        
+        .timeline-container::before {
+            left: 60px;
+            border: medium solid white;
+            border-width: 10px 10px 10px 0;
+            border-color: transparent white transparent transparent;
+        }
+
+        .left::after, .right::after {
+            left: 18px;
+        }
+
+        .right {
+            left: 0%;
+        }
+    }
+</style>
+{% endblock extra_css %}
+
+{% block content %}
+<div class="about-hero">
+    <div class="container text-center">
+        <h1 class="display-3 fw-bold mb-4">Về Chúng Tôi</h1>
+        <p class="lead col-md-8 mx-auto">Chúng tôi là đội ngũ đam mê công nghệ, mang đến cho bạn những sản phẩm chất lượng và trải nghiệm mua sắm tuyệt vời nhất.</p>
+    </div>
+</div>
+
+<section class="about-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <h2 class="section-heading">Câu Chuyện Của Chúng Tôi</h2>
+                <p>Được thành lập vào năm 2020, chúng tôi bắt đầu như một cửa hàng nhỏ chuyên về thiết bị di động tại Đà Nẵng. Với niềm đam mê công nghệ và mong muốn mang đến những sản phẩm chất lượng, chúng tôi đã nhanh chóng phát triển và mở rộng danh mục sản phẩm.</p>
+                <p>Sau hơn 5 năm hoạt động, chúng tôi tự hào trở thành một trong những địa chỉ mua sắm công nghệ uy tín hàng đầu tại Việt Nam, luôn cập nhật những xu hướng mới nhất và mang đến cho khách hàng những trải nghiệm mua sắm trực tuyến tuyệt vời.</p>
+                <p>Sứ mệnh của chúng tôi là kết nối mọi người với công nghệ một cách dễ dàng, thuận tiện và đáng tin cậy.</p>
+                <a href="{% url 'shop:product_list' %}" class="btn btn-primary mt-3">Khám phá sản phẩm</a>
+            </div>
+            <div class="col-lg-6">
+                <img src="{{MEDIA_URL}}images/about-story.jpg" alt="Câu chuyện của chúng tôi" class="img-fluid rounded shadow-lg">
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="about-section bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="section-heading mx-auto">Giá Trị Cốt Lõi</h2>
+            <p class="lead">Những giá trị định hướng mọi quyết định và hành động của chúng tôi</p>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="value-card">
+                    <div class="value-icon">
+                        <i class="bi bi-star-fill"></i>
+                    </div>
+                    <h3 class="h4 mb-3">Chất Lượng</h3>
+                    <p>Chúng tôi cam kết cung cấp những sản phẩm chất lượng cao nhất, được chọn lọc kỹ lưỡng từ các thương hiệu uy tín toàn cầu.</p>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-4">
+                <div class="value-card">
+                    <div class="value-icon">
+                        <i class="bi bi-shield-check"></i>
+                    </div>
+                    <h3 class="h4 mb-3">Tin Cậy</h3>
+                    <p>Xây dựng niềm tin với khách hàng là ưu tiên hàng đầu của chúng tôi. Chúng tôi luôn giữ chữ tín và minh bạch trong mọi giao dịch.</p>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-4">
+                <div class="value-card">
+                    <div class="value-icon">
+                        <i class="bi bi-lightning-charge"></i>
+                    </div>
+                    <h3 class="h4 mb-3">Đổi Mới</h3>
+                    <p>Chúng tôi không ngừng cải tiến, tìm kiếm những giải pháp sáng tạo nhằm nâng cao trải nghiệm mua sắm của khách hàng.</p>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-4">
+                <div class="value-card">
+                    <div class="value-icon">
+                        <i class="bi bi-people"></i>
+                    </div>
+                    <h3 class="h4 mb-3">Khách Hàng Là Trọng Tâm</h3>
+                    <p>Mọi quyết định của chúng tôi đều hướng đến việc mang lại giá trị và sự hài lòng tối đa cho khách hàng.</p>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-4">
+                <div class="value-card">
+                    <div class="value-icon">
+                        <i class="bi bi-hand-thumbs-up"></i>
+                    </div>
+                    <h3 class="h4 mb-3">Dịch Vụ Xuất Sắc</h3>
+                    <p>Chúng tôi cam kết mang đến dịch vụ khách hàng xuất sắc, từ tư vấn sản phẩm đến hỗ trợ sau bán hàng.</p>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-4">
+                <div class="value-card">
+                    <div class="value-icon">
+                        <i class="bi bi-globe"></i>
+                    </div>
+                    <h3 class="h4 mb-3">Trách Nhiệm Xã Hội</h3>
+                    <p>Chúng tôi luôn ý thức về trách nhiệm của mình đối với cộng đồng và môi trường trong mọi hoạt động kinh doanh.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="about-section">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="section-heading mx-auto">Hành Trình Phát Triển</h2>
+            <p class="lead">Những cột mốc quan trọng trong chặng đường phát triển của chúng tôi</p>
+        </div>
+        
+        <div class="timeline">
+            <div class="timeline-container left">
+                <div class="timeline-content">
+                    <h3>2020</h3>
+                    <p>Thành lập cửa hàng đầu tiên tại Đà Nẵng, chuyên kinh doanh các sản phẩm điện thoại và phụ kiện.</p>
+                </div>
+            </div>
+            <div class="timeline-container right">
+                <div class="timeline-content">
+                    <h3>2021</h3>
+                    <p>Mở rộng danh mục sản phẩm với các thiết bị điện tử tiêu dùng và ra mắt website thương mại điện tử đầu tiên.</p>
+                </div>
+            </div>
+            <div class="timeline-container left">
+                <div class="timeline-content">
+                    <h3>2022</h3>
+                    <p>Vượt qua các thách thức khó khăn, chúng tôi đã chuyển đổi số mạnh mẽ và tăng trưởng 200% doanh số trực tuyến.</p>
+                </div>
+            </div>
+            <div class="timeline-container right">
+                <div class="timeline-content">
+                    <h3>2023</h3>
+                    <p>Mở thêm 2 cửa hàng mới tại Hà Nội và TP. Hồ Chí Minh, đồng thời triển khai hệ thống logistics riêng.</p>
+                </div>
+            </div>
+            <div class="timeline-container left">
+                <div class="timeline-content">
+                    <h3>2024</h3>
+                    <p>Đạt mốc 100,000 khách hàng thân thiết và trở thành đối tác chính thức của nhiều thương hiệu công nghệ lớn.</p>
+                </div>
+            </div>
+            <div class="timeline-container right">
+                <div class="timeline-content">
+                    <h3>2025</h3>
+                    <p>Ra mắt nền tảng thương mại điện tử mới với trải nghiệm người dùng được cải tiến và hệ thống hỗ trợ khách hàng 24/7.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="about-section bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="section-heading mx-auto">Đội Ngũ Của Chúng Tôi</h2>
+            <p class="lead">Những con người tài năng và đam mê đứng sau thành công của chúng tôi</p>
+        </div>
+        
+        <div class="row justify-content-md-center">
+            <div class="col-lg-3 col-md-6">
+                <div class="team-member">
+                    <img src="{{MEDIA_URL}}images/avata1.webp" alt="CEO" class="img-fluid">
+                    <div class="team-member-info">
+                        <h4>Nguyễn Phương Trà</h4>
+                        <p class="text-muted">CEO & Founder</p>
+                        <div class="social-icons">
+                            <a href="#"><i class="bi bi-linkedin"></i></a>
+                            <a href="#"><i class="bi bi-twitter"></i></a>
+                            <a href="#"><i class="bi bi-facebook"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="about-section">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="section-heading mx-auto">Thành Tựu Của Chúng Tôi</h2>
+            <p class="lead">Những con số ấn tượng đánh dấu sự phát triển không ngừng</p>
+        </div>
+        
+        <div class="row text-center">
+            <div class="col-md-3 col-6">
+                <div class="milestone-item">
+                    <div class="milestone-count">5+</div>
+                    <div class="milestone-label">Năm kinh nghiệm</div>
+                </div>
+            </div>
+            
+            <div class="col-md-3 col-6">
+                <div class="milestone-item">
+                    <div class="milestone-count">100K+</div>
+                    <div class="milestone-label">Khách hàng hài lòng</div>
+                </div>
+            </div>
+            
+            <div class="col-md-3 col-6">
+                <div class="milestone-item">
+                    <div class="milestone-count">5000+</div>
+                    <div class="milestone-label">Sản phẩm</div>
+                </div>
+            </div>
+            
+            <div class="col-md-3 col-6">
+                <div class="milestone-item">
+                    <div class="milestone-count">20+</div>
+                    <div class="milestone-label">Giải thưởng</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="about-section bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="section-heading mx-auto">Khách Hàng Nói Gì Về Chúng Tôi</h2>
+            <p class="lead">Những đánh giá chân thực từ khách hàng của chúng tôi</p>
+        </div>
+        
+        <div class="row">
+            <div class="col-lg-6 mb-4">
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        <p class="mb-0">"Tôi đã mua sắm tại đây nhiều lần và luôn hài lòng với chất lượng sản phẩm cũng như dịch vụ khách hàng. Đặc biệt, giao hàng luôn đúng hẹn và đội ngũ nhân viên rất nhiệt tình, chuyên nghiệp."</p>
+                        <div class="testimonial-author">
+                            <img src="https://images2.thanhnien.vn/528068263637045248/2024/4/3/jack-1712114239424422902059.jpg  " alt="Customer">
+                            <div>
+                                <h5 class="mb-0">Jack97</h5>
+                                <small class="text-muted">Khách hàng thân thiết</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-6 mb-4">
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        <p class="mb-0">"Sản phẩm chính hãng, giá cả hợp lý và chế độ bảo hành tuyệt vời. Tôi đặc biệt ấn tượng với cách họ xử lý khi tôi gặp vấn đề với sản phẩm - nhanh chóng và hiệu quả. Sẽ tiếp tục ủng hộ!"</p>
+                        <div class="testimonial-author">
+                            <img src="https://cafefcdn.com/203337114487263232/2025/3/24/46809348640087005326936212002837522307145189n-1742805438894970555559-1742809694198-17428096942762046265337.jpg" alt="Customer">
+                            <div>
+                                <h5 class="mb-0">Viruss</h5>
+                                <small class="text-muted">Khách hàng mới</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="about-section">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="section-heading mx-auto">Đối Tác Của Chúng Tôi</h2>
+            <p class="lead">Chúng tôi tự hào hợp tác với những thương hiệu hàng đầu thế giới</p>
+        </div>
+        
+        <div class="brand-logos">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="Partner" class="brand-logo">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/2/24/Samsung_Logo.svg" alt="Partner" class="brand-logo">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Dell_Logo.png" alt="Partner" class="brand-logo">
+            <img src="https://thoitranghaianh.com/wp-content/uploads/2018/06/logo-sony.png" alt="Partner" class="brand-logo">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Xiaomi_logo_%282021-%29.svg/1200px-Xiaomi_logo_%282021-%29.svg.png" alt="Partner" class="brand-logo">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/HP_logo_2012.svg/1200px-HP_logo_2012.svg.png" alt="Partner" class="brand-logo">
+        </div>
+    </div>
+</section>
+
+<section class="about-section bg-primary text-white text-center">
+    <div class="container">
+        <h2 class="display-5 fw-bold mb-4">Trở Thành Một Phần Của Câu Chuyện Chúng Tôi</h2>
+        <p class="lead mb-4">Khám phá các sản phẩm chất lượng cao và trải nghiệm mua sắm tuyệt vời</p>
+        <a href="{% url 'shop:product_list' %}" class="btn btn-light btn-lg px-4 me-md-2">Mua sắm ngay</a>
+        <a href="{% url 'shop:contact' %}" class="btn btn-outline-light btn-lg px-4">Liên hệ chúng tôi</a>
+    </div>
+</section>
+{% endblock content %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const milestones = document.querySelectorAll('.milestone-count');
+        
+        const options = {
+            threshold: 0.5
+        };
+        
+        const observer = new IntersectionObserver(function(entries, observer) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const target = entry.target;
+                    const countTo = target.innerText;
+                    
+                    let count = 0;
+                    const countUp = setInterval(() => {
+                        const increment = countTo.includes('K+') ? 1000 : 1;
+                        count += increment;
+                        
+                        if (countTo.includes('K+')) {
+                            const value = Math.min(parseInt(countTo), count/1000);
+                            target.innerText = value + 'K+';
+                            if (value >= parseInt(countTo)) {
+                                clearInterval(countUp);
+                            }
+                        } else {
+                            target.innerText = Math.min(count, parseInt(countTo)) + (countTo.includes('+') ? '+' : '');
+                            if (count >= parseInt(countTo)) {
+                                clearInterval(countUp);
+                            }
+                        }
+                    }, 20);
+                    
+                    observer.unobserve(target);
+                }
+            });
+        }, options);
+        
+        milestones.forEach(milestone => {
+            observer.observe(milestone);
+        });
+    });
+</script>
+{% endblock extra_js %}

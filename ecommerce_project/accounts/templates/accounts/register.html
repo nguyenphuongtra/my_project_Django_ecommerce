@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Đăng ký{% endblock title %}
+
+{% block content %}
+<div class="container py-5">
+  <!-- Breadcrumb -->
+  <nav aria-label="breadcrumb" class="small mb-4">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'shop:home' %}" class="text-decoration-none">Trang chủ</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Đăng ký</li>
+    </ol>
+  </nav>
+
+  <div class="row justify-content-center">
+    <div class="col-lg-6">
+      <div class="card border-0 shadow-lg rounded-4">
+        <div class="card-body p-sm-5">
+          <div class="text-center mb-4">
+            <div class="mb-3">
+              <span class="icon-circle bg-primary text-white">
+                <i class="fas fa-user-plus"></i>
+              </span>
+            </div>
+            <h2 class="fw-bold text-primary">Đăng ký tài khoản</h2>
+            <p class="text-muted">Tham gia cùng chúng tôi để có trải nghiệm mua sắm tốt nhất</p>
+          </div>
+
+          {% if form.errors %}
+          <div class="alert alert-danger">
+            <i class="fas fa-exclamation-circle me-2"></i>Vui lòng kiểm tra lại thông tin đăng ký
+          </div>
+          {% endif %}
+
+          <form method="POST" class="form-floating" novalidate>
+            {% csrf_token %}
+
+            <div class="form-floating mb-3">
+              <input type="text" name="username" id="id_username" class="form-control {% if form.username.errors %}is-invalid{% endif %}" placeholder="Tên đăng nhập" required>
+              <label for="id_username">Tên đăng nhập <span class="text-danger">*</span></label>
+              {% if form.username.errors %}
+                <div class="invalid-feedback">{{ form.username.errors.0 }}</div>
+              {% endif %}
+              <div class="form-text small">Tên đăng nhập của bạn phải có từ 6-20 ký tự, chỉ chứa chữ cái, số và ký tự đặc biệt @/./+/-/_</div>
+            </div>
+
+            <div class="form-floating mb-3">
+              <input type="email" name="email" id="id_email" class="form-control {% if form.email.errors %}is-invalid{% endif %}" placeholder="Email" required>
+              <label for="id_email">Email <span class="text-danger">*</span></label>
+              {% if form.email.errors %}
+                <div class="invalid-feedback">{{ form.email.errors.0 }}</div>
+              {% endif %}
+            </div>
+
+            <div class="form-floating mb-3">
+              <input type="password" name="password1" id="id_password1" class="form-control {% if form.password1.errors %}is-invalid{% endif %}" placeholder="Mật khẩu" required>
+              <label for="id_password1">Mật khẩu <span class="text-danger">*</span></label>
+              {% if form.password1.errors %}
+                <div class="invalid-feedback">{{ form.password1.errors.0 }}</div>
+              {% endif %}
+              <div class="form-text small">
+                <ul class="ps-3 mb-0">
+                  <li>Mật khẩu phải có ít nhất 8 ký tự</li>
+                  <li>Mật khẩu không được quá đơn giản</li>
+                  <li>Mật khẩu không được chứa toàn số</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="form-floating mb-3">
+              <input type="password" name="password2" id="id_password2" class="form-control {% if form.password2.errors %}is-invalid{% endif %}" placeholder="Nhập lại mật khẩu" required>
+              <label for="id_password2">Xác nhận mật khẩu <span class="text-danger">*</span></label>
+              {% if form.password2.errors %}
+                <div class="invalid-feedback">{{ form.password2.errors.0 }}</div>
+              {% endif %}
+            </div>
+
+            <div class="d-grid mt-4">
+              <button type="submit" class="btn btn-primary btn-lg">
+                <i class="fas fa-user-plus me-2"></i>Đăng ký
+              </button>
+            </div>
+          </form>
+          
+          <div class="mt-4 text-center">
+            <p class="mb-0">Đã có tài khoản? <a href="{% url 'accounts:login' %}" class="text-decoration-none fw-medium">Đăng nhập ngay</a></p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="card mt-4 border-0 shadow-sm rounded-4">
+        <div class="card-body">
+          <div class="d-flex align-items-center">
+            <div class="text-primary me-3">
+              <i class="fas fa-shield-alt fa-2x"></i>
+            </div>
+            <div>
+              <h5 class="mb-1">Bảo mật thông tin</h5>
+              <p class="text-muted small mb-0">Thông tin của bạn sẽ được mã hóa và bảo mật tuyệt đối</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.icon-circle {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+}
+
+.form-floating > .form-control {
+  padding: 1rem 0.75rem;
+}
+
+.form-control:focus {
+  border-color: var(--bs-primary);
+  box-shadow: 0 0 0 0.25rem rgba(var(--bs-primary-rgb), 0.25);
+}
+
+.btn {
+  transition: transform 0.2s;
+}
+
+.btn:hover {
+  transform: translateY(-3px);
+}
+
+.card {
+  transition: transform 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.form-text ul {
+  margin-top: 0.5rem;
+}
+
+.form-text li {
+  margin-bottom: 0.25rem;
+}
+</style>
+{% endblock content %}
