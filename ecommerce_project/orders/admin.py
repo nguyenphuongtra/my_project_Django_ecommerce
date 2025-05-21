@@ -20,10 +20,10 @@ class OrderAdmin(admin.ModelAdmin):
     list_display = ('id', 'user', 'status', 'created_at', 'formatted_total', 'get_payment_method_display')
     list_filter = ('status', 'created_at', 'payment_method')
     search_fields = ('id', 'user__username', 'user__email')
-    readonly_fields = ('formatted_total', 'formatted_shipping_fee', 'get_payment_method_display')
+    readonly_fields = ('formatted_total', 'formatted_shipping_fee', 'get_payment_method_display', 'created_at')
     fieldsets = (
         ('Thông tin đơn hàng', {
-            'fields': ('user', 'status', 'created_at', 'payment_method', 'get_payment_method_display')
+            'fields': ('user', 'status', 'payment_method', 'get_payment_method_display')
         }),
         ('Địa chỉ giao hàng', {
             'fields': ('province', 'district', 'ward', 'shipping_address')

@@ -9,7 +9,7 @@ class RegisterForm(UserCreationForm):
         fields = ['username', 'email', 'password1', 'password2']
 
 class ProfileForm(UserChangeForm):
-    password = None  # Remove the password field from the form
+    password = None  
     avatar = forms.ImageField(
         required=False, 
         widget=forms.FileInput(attrs={'class': 'form-control', 'accept': 'image/*'})
