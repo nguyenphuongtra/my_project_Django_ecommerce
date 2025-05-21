@@ -67,5 +67,4 @@
 Mọi đóng góp, báo lỗi hoặc ý tưởng mới đều được hoan nghênh!
 
 ---
-**Tác giả:** Nhóm phát triển Project_ecommerce
-**Ngày cập nhật:** 21/05/2025
+**Tác giả:** Nguyen Phuong Tra
