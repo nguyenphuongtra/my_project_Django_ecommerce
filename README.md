@@ -40,8 +40,7 @@ Tính năng
 
 🔹 Tích hợp Google Maps API hiển thị vị trí các cửa hàng trên bản đồ.
 
-
-
+🔹 Tích hợp dữ liệu từ file JSON để hiển thị và lựa chọn địa chỉ giao hàng theo cấu trúc Tỉnh,Huyện,Xã.
 ## Yêu cầu hệ thống
 
 Python 3.12+
