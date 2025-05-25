@@ -152,9 +152,7 @@ Giấy phép
 
 Dự án được phân phối theo giấy phép MIT License. Xem thêm trong file LICENSE.
 
-Tác giả
-
-Nguyen Phuong Tra
+Tác giả: Nguyen Phuong Tra
 Email: nguyenthanhtra.240805@gmail.com
 
 
